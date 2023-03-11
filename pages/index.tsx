@@ -2,10 +2,34 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import { useEffect } from 'react';
+import { UserAuthResponseUserDataType } from '@/utils/types';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const dispatch = useDispatch();
+
+  const handleCheckAuthStatus = () => {
+    const user = localStorage.getItem('user');
+    const userData: UserAuthResponseUserDataType = user? JSON.parse(user) : '';
+    if (user) {
+      dispatch(setIsAuthenticated(true));
+      dispatch(setUserId(userData.id));
+      dispatch(setAuthToken(userData.token))
+    } else {
+      dispatch(setIsAuthenticated(false));
+      dispatch(setUserId(''));
+      dispatch(setAuthToken(''))
+    }
+  };
+
+  useEffect(() => {
+    handleCheckAuthStatus();
+  }, []);
+
   return (
     <>
       <Head>

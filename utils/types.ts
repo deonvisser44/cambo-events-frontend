@@ -6,8 +6,12 @@ export interface ImageDataType {
 }
 
 export interface LocationType {
-  lat: string;
-  lng: string;
+  lat: string | number;
+  lng: string | number;
+}
+
+export interface MapClickEvent {
+  latlng: LocationType;
 }
 
 export interface EventType {
@@ -15,8 +19,8 @@ export interface EventType {
   host_id: string;
   name: string;
   description: string;
-  start_time: Date;
-  end_time: Date;
+  start_date: Date;
+  end_date: Date;
   location: LocationType;
   image: ImageDataType;
   category: string[];
@@ -28,4 +32,33 @@ export interface UserType {
   email: string;
   profile_image: ImageDataType;
   primary_location: LocationType;
+}
+
+export interface calculateEndTypesParams {
+  startDate: Date | null | string;
+  startTime: string;
+  endDate?: Date | null | string;
+  endTime?: string | null;
+}
+
+export interface submitEventType {
+  name: string;
+  description: string;
+  startDate: Date | null | string;
+  startTime: string;
+  endDate?: Date | null | string;
+  endTime?: string | null;
+  categories?: { label:string, value: string }[];
+  coords: LocationType;
+}
+
+export interface UserAuthResponseUserDataType {
+    id: string;
+    token: string;
+}
+
+export interface UserStateType {
+  user_id: string,
+  isUserAuthenticated: boolean,
+  authToken: string,
 }

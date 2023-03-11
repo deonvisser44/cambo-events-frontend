@@ -7,10 +7,15 @@ import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 import EventMap from './event-map';
 
-const myIcon = new Icon({
-  iconUrl: 'https://www.svgrepo.com/show/449139/location-pin-filled.svg',
-  iconSize: [32, 32],
-});
+const containerStyle = {
+  width: '400px',
+  height: '400px'
+};
+
+const center = {
+  lat: -3.745,
+  lng: -38.523
+};
 
 interface Props {
   event: EventType;
@@ -25,13 +30,13 @@ export default function EventCard({ event }: Props) {
     description,
     location,
     image,
-    start_time,
-    end_time,
+    start_date,
+    end_date,
     category,
   } = event;
-  const luxonStartDate = DateTime.fromJSDate(start_time);
+  const luxonStartDate = DateTime.fromISO(new Date(start_date).toISOString());
   const startDateToUSe = luxonStartDate.toLocaleString(DateTime.DATETIME_MED);
-  const luxonEndDate = DateTime.fromJSDate(end_time);
+  const luxonEndDate = DateTime.fromISO(new Date(end_date).toISOString());
   const EndDateToUSe = luxonEndDate.toLocaleString(DateTime.DATETIME_MED);
 
   const toggleShowMore = () => {

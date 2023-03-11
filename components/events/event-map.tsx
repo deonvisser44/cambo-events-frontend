@@ -2,11 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import React from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Icon } from 'leaflet';
-
-const myIcon = new Icon({
-  iconUrl: 'https://www.svgrepo.com/show/449139/location-pin-filled.svg',
-  iconSize: [32, 32],
-});
+import { locationIcon } from '@/utils/constants';
 
 interface Props {
   lat: number;
@@ -14,6 +10,7 @@ interface Props {
 }
 
 export default function EventMap({ lat, lng }: Props) {
+
   return (
     <div className='flex justify-center items-center text-lg w-full max-h-[250px] z-10'>
       <MapContainer
@@ -32,7 +29,7 @@ export default function EventMap({ lat, lng }: Props) {
         <Marker
           key={1}
           position={[lat, lng]}
-          icon={myIcon}
+          icon={locationIcon}
         />
       </MapContainer>
     </div>

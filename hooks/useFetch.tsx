@@ -1,8 +1,20 @@
+import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import { UserAuthResponseUserDataType } from '@/utils/types';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 const useFetch = (url: string) => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleLogin = (user: UserAuthResponseUserDataType) => {
+    if (user) {
+      dispatch(setIsAuthenticated(true));
+      dispatch(setUserId(user.id));
+      dispatch(setAuthToken(user.token))
+    }
+  };
 
   const handleGoogle = async (response: any) => {
     setLoading(true);
@@ -22,7 +34,7 @@ const useFetch = (url: string) => {
       .then((data) => {
         if (data?.user) {
           localStorage.setItem('user', JSON.stringify(data?.user));
-          window.location.reload();
+          handleLogin(data.user)
         }
 
         throw new Error(data?.message || data);

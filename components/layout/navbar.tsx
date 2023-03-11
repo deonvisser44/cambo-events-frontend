@@ -1,13 +1,19 @@
 import Image from 'next/image';
 import MobileNavButton from './mobile-nav-button';
-
 import React, { useState, useRef } from 'react';
 import { Transition } from '@headlessui/react';
 import DesktopNavButton from './desktop-nav-button';
+import { useSelector } from 'react-redux';
+import { selectUserState } from '@/store/user';
+import { UserStateType } from '@/utils/types';
+import MobileLogoutButton from './mobile-logout-button';
+import DesktopLogoutButton from './desktop-logout-button';
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const navRev = useRef<HTMLDivElement>(null);
+  const userState: UserStateType = useSelector(selectUserState); // updated
+
   return (
     <nav className='bg-gray-800 z-50'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -24,12 +30,16 @@ export default function NavBar() {
             </div>
             <div className='hidden md:block'>
               <div className='ml-10 flex items-baseline space-x-4'>
-              <DesktopNavButton label='Events' path='/events' />
-              <DesktopNavButton label='Post Event' path='/post-event' />
-              <DesktopNavButton label='Saved Events' path='/saved-events' />
-              <DesktopNavButton label='My Events' path='/my-events' />
-              <DesktopNavButton label='Contact' path='/contact' />
-              <DesktopNavButton label='Logout' path='/' />
+                <DesktopNavButton label='Events' path='/events' />
+                <DesktopNavButton label='Post Event' path='/post-event' />
+                <DesktopNavButton label='Saved Events' path='/saved-events' />
+                <DesktopNavButton label='My Events' path='/my-events' />
+                <DesktopNavButton label='Contact' path='/contact' />
+                {userState?.isUserAuthenticated ? (
+                  <DesktopLogoutButton />
+                ) : (
+                  <DesktopNavButton label='Login / Sign Up' path='/auth' />
+                )}
               </div>
             </div>
           </div>
@@ -90,16 +100,48 @@ export default function NavBar() {
         leaveTo='opacity-0 scale-95'
         style={{ zIndex: 1000 }}
       >
-          <div className='md:hidden fixed z-50 bg-gray-800 w-[100%]' id='mobile-menu' style={{ zIndex: 1000 }}>
-            <div ref={navRev} className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
-              <MobileNavButton label='Events' path='/events' />
-              <MobileNavButton label='Post Event' path='/post-event' />
-              <MobileNavButton label='Saved Events' path='/saved-events' />
-              <MobileNavButton label='My Events' path='/my-events' />
-              <MobileNavButton label='Contact' path='/contact' />
-              <MobileNavButton label='Logout' path='/' />
-            </div>
+        <div
+          className='md:hidden fixed z-50 bg-gray-800 w-[100%]'
+          id='mobile-menu'
+          style={{ zIndex: 1000 }}
+        >
+          <div ref={navRev} className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
+            <MobileNavButton
+              setIsOpen={setIsOpen}
+              label='Events'
+              path='/events'
+            />
+            <MobileNavButton
+              setIsOpen={setIsOpen}
+              label='Post Event'
+              path='/post-event'
+            />
+            <MobileNavButton
+              setIsOpen={setIsOpen}
+              label='Saved Events'
+              path='/saved-events'
+            />
+            <MobileNavButton
+              setIsOpen={setIsOpen}
+              label='My Events'
+              path='/my-events'
+            />
+            <MobileNavButton
+              setIsOpen={setIsOpen}
+              label='Contact'
+              path='/contact'
+            />
+            {userState?.isUserAuthenticated ? (
+              <MobileLogoutButton setIsOpen={setIsOpen} />
+            ) : (
+              <MobileNavButton
+                setIsOpen={setIsOpen}
+                label='Login / Sign Up'
+                path='/auth'
+              />
+            )}
           </div>
+        </div>
       </Transition>
     </nav>
   );
