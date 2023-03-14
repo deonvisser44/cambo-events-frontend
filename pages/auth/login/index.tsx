@@ -11,13 +11,13 @@ export default function Login() {
 
   useEffect(() => {
     /* global google */
-    if ((window as any).google) {
+    if ((global?.window as any).google) {
       (window as any).google.accounts.id.initialize({
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         callback: handleGoogle,
       });
 
-      (window as any).google.accounts.id.renderButton(
+      (global?.window as any).google.accounts.id.renderButton(
         document.getElementById('loginDiv'),
         {
           // type: "standard",

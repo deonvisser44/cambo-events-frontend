@@ -2,10 +2,21 @@ import React from 'react';
 import Footer from './footer';
 import Navbar from './navbar';
 import Script from 'next/script';
-import { useDispatch } from 'react-redux';
-import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectUserState,
+  setAuthToken,
+  setHasAccessTokenBeenAddedToInterceptor,
+  setIsAuthenticated,
+  setSavedEventIds,
+  setSavedEvents,
+  setUserId,
+} from '@/store/user';
 import { useEffect } from 'react';
-import { UserAuthResponseUserDataType } from '@/utils/types';
+import { SavedEventType, UserAuthResponseUserDataType, UserStateType } from '@/utils/types';
+import camboEventsApi, {
+  addAccessTokenToInterceptor,
+} from '@/services/axios-config';
 
 interface Props {
   children: JSX.Element;
@@ -13,18 +24,34 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const dispatch = useDispatch();
+  const userState: UserStateType = useSelector(selectUserState);
+  const { hasAccessTokenBeenAddedToInterceptor } = userState;
 
-  const handleCheckAuthStatus = () => {
+  const fetchSavedEvents = async () => {
+    const response = await camboEventsApi.get('/event/saved');
+    const eventIds: string[] = response.data.map(
+      (savedEvent: SavedEventType) => savedEvent.event.id
+    );
+    dispatch(setSavedEvents(response.data));
+    dispatch(setSavedEventIds(eventIds));
+  };
+
+  const handleCheckAuthStatus = async () => {
     const user = localStorage.getItem('user');
-    const userData: UserAuthResponseUserDataType = user? JSON.parse(user) : '';
+    const userData: UserAuthResponseUserDataType = user ? JSON.parse(user) : '';
     if (user) {
+      if (!hasAccessTokenBeenAddedToInterceptor) {
+        addAccessTokenToInterceptor(userData.token);
+        dispatch(setHasAccessTokenBeenAddedToInterceptor(true));
+      }
       dispatch(setIsAuthenticated(true));
       dispatch(setUserId(userData.id));
-      dispatch(setAuthToken(userData.token))
+      dispatch(setAuthToken(userData.token));
+      await fetchSavedEvents();
     } else {
       dispatch(setIsAuthenticated(false));
       dispatch(setUserId(''));
-      dispatch(setAuthToken(''))
+      dispatch(setAuthToken(''));
     }
   };
 

@@ -1,31 +1,26 @@
-import { EventType } from '@/utils/types';
+import { EventType, UserStateType } from '@/utils/types';
 import React, { useState } from 'react';
 import { DateTime } from 'ts-luxon';
 import Close from '../icons/close';
 import Expand from '../icons/expand';
 import 'leaflet/dist/leaflet.css';
-import { Icon } from 'leaflet';
-import EventMap from './event-map';
+import dynamic from 'next/dynamic';
+import { useSelector } from 'react-redux';
+import { selectUserState } from '@/store/user';
+import Bookmark from './event-bookmark';
 
-const containerStyle = {
-  width: '400px',
-  height: '400px'
-};
-
-const center = {
-  lat: -3.745,
-  lng: -38.523
-};
+const EventMap = dynamic(() => import('./event-map'), { ssr: false });
 
 interface Props {
   event: EventType;
 }
 
 export default function EventCard({ event }: Props) {
+  const userState: UserStateType = useSelector(selectUserState);
+  const { savedEventIds } = userState;
   const [isShowMoreOpen, setIsShowMoreOpen] = useState(false);
   const {
     id,
-    host_id,
     name,
     description,
     location,
@@ -38,6 +33,7 @@ export default function EventCard({ event }: Props) {
   const startDateToUSe = luxonStartDate.toLocaleString(DateTime.DATETIME_MED);
   const luxonEndDate = DateTime.fromISO(new Date(end_date).toISOString());
   const EndDateToUSe = luxonEndDate.toLocaleString(DateTime.DATETIME_MED);
+  const isEventSavedForUser = savedEventIds.includes(id);
 
   const toggleShowMore = () => {
     setIsShowMoreOpen((prevState) => !prevState);
@@ -46,7 +42,11 @@ export default function EventCard({ event }: Props) {
   return (
     <div className='border border-gray-400 w-[90%] flex flex-col rounded-lg bg-slate-400'>
       <div onClick={toggleShowMore} className='px-2 py-2 gap-1 flex flex-col'>
-        <h1 className='text-lg font-semibold'>{name}</h1>
+        <div className='flex justify-between'>
+          <h1 className='text-lg font-semibold'>{name}</h1>
+          <Bookmark isSavedForUser={isEventSavedForUser} eventId={event.id} />
+        </div>
+
         <p className='text-xs'>{startDateToUSe}</p>
         <div className='flex gap-2 w-full'>
           {category.map((item, index) => (

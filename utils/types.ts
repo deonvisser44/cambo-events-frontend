@@ -26,6 +26,12 @@ export interface EventType {
   category: string[];
 }
 
+export interface SavedEventType {
+  event: EventType;
+  id: string;
+  user_id: string;
+}
+
 export interface UserType {
   id: string;
   name: string;
@@ -61,4 +67,7 @@ export interface UserStateType {
   user_id: string,
   isUserAuthenticated: boolean,
   authToken: string,
+  savedEvents: SavedEventType[],
+  savedEventIds: string[],
+  hasAccessTokenBeenAddedToInterceptor: boolean,
 }

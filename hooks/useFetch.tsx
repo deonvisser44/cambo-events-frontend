@@ -1,3 +1,4 @@
+import { addAccessTokenToInterceptor } from '@/services/axios-config';
 import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
 import { UserAuthResponseUserDataType } from '@/utils/types';
 import { useState } from 'react';
@@ -10,6 +11,8 @@ const useFetch = (url: string) => {
 
   const handleLogin = (user: UserAuthResponseUserDataType) => {
     if (user) {
+      addAccessTokenToInterceptor(user.token);
+      dispatch(setHasAccessTokenBeenAddedToInterceptor(true));
       dispatch(setIsAuthenticated(true));
       dispatch(setUserId(user.id));
       dispatch(setAuthToken(user.token))
@@ -47,3 +50,7 @@ const useFetch = (url: string) => {
 };
 
 export default useFetch;
+function setHasAccessTokenBeenAddedToInterceptor(arg0: boolean): any {
+  throw new Error('Function not implemented.');
+}
+

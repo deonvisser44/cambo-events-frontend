@@ -74,9 +74,7 @@ export default function PostEvent() {
       start_date: start,
       end_date: end,
     };
-    const res = await camboEventsApi.post('/event', postEventBody, {
-      headers: { authorization: `Bearer ${authToken}` },
-    });
+    const res = await camboEventsApi.post('/event', postEventBody);
   };
 
   return (

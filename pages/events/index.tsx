@@ -1,18 +1,13 @@
 import EventCard from '@/components/events/event-card';
 import camboEventsApi from '@/services/axios-config';
-import React, { useEffect, useState } from 'react';
+import { EventType } from '@/utils/types';
+import React from 'react';
 
-export default function Events() {
-  const [events, setEvents] = useState([]);
+interface Props {
+  events: EventType[]
+}
 
-  const fetchEvents = async () => {
-    const response = await camboEventsApi.get('/event');
-    setEvents(response.data);
-  };
-
-  useEffect(() => {
-    fetchEvents()
-  }, [])
+export default function Events({ events }: Props) {
   return (
     <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>
       {events.map((event, index) => (
@@ -20,4 +15,15 @@ export default function Events() {
       ))}
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const response = await camboEventsApi.get('/event');
+  const events = response.data;
+
+  return {
+    props: {
+      events,
+    },
+  }
 }

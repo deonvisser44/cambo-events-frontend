@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Link from 'next/link';
 import useFetch from '@/hooks/useFetch';
 
 // https://developers.google.com/identity/gsi/web/reference/js-reference
@@ -11,13 +10,13 @@ export default function SignUp() {
 
   useEffect(() => {
     /* global google */
-    if ((window as any).google) {
-      (window as any).google.accounts.id.initialize({
+    if ((global?.window as any).google) {
+      (global?.window as any).google.accounts.id.initialize({
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         callback: handleGoogle,
       });
 
-      (window as any).google.accounts.id.renderButton(
+      (global?.window as any).google.accounts.id.renderButton(
         document.getElementById('signUpDiv'),
         {
           // type: "standard",
