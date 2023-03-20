@@ -53,13 +53,49 @@ export const TEST_EVENTS: EventType[] = [
   },
 ];
 
+export enum EventCategoryOptions {
+  ART = 'ART',
+  MUSIC = 'MUSIC',
+  DANCE = 'DANCE',
+  QUIZ = 'QUIZ',
+  PARTY = 'PARTY',
+  FOOD = 'FOOD',
+  DRINK = 'DRINK',
+  EDUCATION = 'EDUCATION',
+  SPORTS = 'SPORTS',
+  CONCERT = 'CONCERT',
+  FESTIVAL = 'FESTIVAL',
+  EXPO = 'CONFERENCE',
+  NETWORKING = 'NETWORKING',
+  CULTURAL = 'CULTURAL',
+  WORKSHOP = 'WORKSHOP',
+  TRADE_SHOW = 'TRADE_SHOW',
+}
+
 export const categoryOptions = [
   { label: 'ART', value: 'ART' },
   { label: 'MUSIC', value: 'MUSIC' },
   { label: 'DANCE', value: 'DANCE' },
+  { label: 'QUIZ', value: 'QUIZ' },
+  { label: 'PARTY', value: 'PARTY' },
+  { label: 'FOOD', value: 'FOOD' },
+  { label: 'DRINK', value: 'DRINK' },
+  { label: 'SPORTS', value: 'SPORTS' },
+  { label: 'CONCERT', value: 'CONCERT' },
+  { label: 'FESTIVAL', value: 'FESTIVAL' },
+  { label: 'CONFERENCE', value: 'CONFERENCE' },
+  { label: 'NETWORKING', value: 'NETWORKING' },
+  { label: 'CULTURAL', value: 'CULTURAL' },
+  { label: 'WORKSHOP', value: 'WORKSHOP' },
+  { label: 'EDUCATION', value: 'EDUCATION' },
 ];
 
 export const locationIcon = new Icon({
   iconUrl: 'https://www.svgrepo.com/show/449139/location-pin-filled.svg',
   iconSize: [32, 32],
 });
+
+export const INPUT_STYLES =
+  'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
+export const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
+export const ERROR_STYLES = 'text-red-500';

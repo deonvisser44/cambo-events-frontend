@@ -8,11 +8,17 @@ import { selectUserState } from '@/store/user';
 import { UserStateType } from '@/utils/types';
 import MobileLogoutButton from './mobile-logout-button';
 import DesktopLogoutButton from './desktop-logout-button';
+import { useRouter } from 'next/router';
 
 export default function NavBar() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const navRev = useRef<HTMLDivElement>(null);
-  const userState: UserStateType = useSelector(selectUserState); // updated
+  const userState: UserStateType = useSelector(selectUserState);
+
+  const handleNavigateToHome = () => {
+    router.replace('/');
+  };
 
   return (
     <nav className='bg-gray-800 z-50'>
@@ -20,17 +26,19 @@ export default function NavBar() {
         <div className='flex items-center justify-between h-16'>
           <div className='flex items-center'>
             <div className='flex-shrink-0'>
-              <Image
-                className='h-8 w-8'
-                src='https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg'
-                alt='Workflow'
-                width={50}
-                height={50}
-              />
+              <button onClick={handleNavigateToHome}>
+                <Image
+                  className='h-8 w-8'
+                  src='https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg'
+                  alt='Workflow'
+                  width={50}
+                  height={50}
+                />
+              </button>
             </div>
             <div className='hidden md:block'>
               <div className='ml-10 flex items-baseline space-x-4'>
-                <DesktopNavButton label='Events' path='/events' />
+                <DesktopNavButton label='Events' path='/' />
                 <DesktopNavButton label='Post Event' path='/post-event' />
                 <DesktopNavButton label='Saved Events' path='/saved-events' />
                 <DesktopNavButton label='My Events' path='/my-events' />
@@ -109,7 +117,7 @@ export default function NavBar() {
             <MobileNavButton
               setIsOpen={setIsOpen}
               label='Events'
-              path='/events'
+              path='/'
             />
             <MobileNavButton
               setIsOpen={setIsOpen}

@@ -19,8 +19,8 @@ export interface EventType {
   host_id: string;
   name: string;
   description: string;
-  start_date: Date;
-  end_date: Date;
+  start_date: Date | string ;
+  end_date: Date | string;
   location: LocationType;
   image: ImageDataType;
   category: string[];
@@ -64,10 +64,11 @@ export interface UserAuthResponseUserDataType {
 }
 
 export interface UserStateType {
-  user_id: string,
-  isUserAuthenticated: boolean,
-  authToken: string,
-  savedEvents: SavedEventType[],
-  savedEventIds: string[],
-  hasAccessTokenBeenAddedToInterceptor: boolean,
+  user_id: string;
+  isUserAuthenticated: boolean;
+  authToken: string;
+  savedEvents: SavedEventType[];
+  savedEventIds: string[];
+  hasAccessTokenBeenAddedToInterceptor: boolean;
+  currentEvent: EventType;
 }

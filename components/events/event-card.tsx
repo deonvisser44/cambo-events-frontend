@@ -5,20 +5,28 @@ import Close from '../icons/close';
 import Expand from '../icons/expand';
 import 'leaflet/dist/leaflet.css';
 import dynamic from 'next/dynamic';
-import { useSelector } from 'react-redux';
-import { selectUserState } from '@/store/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserState, setCurrentEvent } from '@/store/user';
 import Bookmark from './event-bookmark';
+import { useRouter } from 'next/router';
+import EditButton from './edit-button';
+import DeleteIcon from '../icons/delete';
+import DeleteModal from './delete-modal';
 
 const EventMap = dynamic(() => import('./event-map'), { ssr: false });
 
 interface Props {
   event: EventType;
+  handleUpdateListAfterDelete?: () => void;
 }
 
-export default function EventCard({ event }: Props) {
+export default function EventCard({ event, handleUpdateListAfterDelete }: Props) {
+  const router = useRouter();
   const userState: UserStateType = useSelector(selectUserState);
+  const dispatch = useDispatch();
   const { savedEventIds } = userState;
   const [isShowMoreOpen, setIsShowMoreOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
     id,
     name,
@@ -34,9 +42,16 @@ export default function EventCard({ event }: Props) {
   const luxonEndDate = DateTime.fromISO(new Date(end_date).toISOString());
   const EndDateToUSe = luxonEndDate.toLocaleString(DateTime.DATETIME_MED);
   const isEventSavedForUser = savedEventIds.includes(id);
+  const isOnMyEventsPage = router.pathname.includes('my-events');
 
   const toggleShowMore = () => {
     setIsShowMoreOpen((prevState) => !prevState);
+  };
+
+  const handleDeleteIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    dispatch(setCurrentEvent(event));
+    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -44,7 +59,14 @@ export default function EventCard({ event }: Props) {
       <div onClick={toggleShowMore} className='px-2 py-2 gap-1 flex flex-col'>
         <div className='flex justify-between'>
           <h1 className='text-lg font-semibold'>{name}</h1>
-          <Bookmark isSavedForUser={isEventSavedForUser} eventId={event.id} />
+          {isOnMyEventsPage ? (
+            <div className='flex gap-2'>
+              <DeleteIcon onClick={handleDeleteIconClick} />
+              <EditButton event={event} />
+            </div>
+          ) : (
+            <Bookmark isSavedForUser={isEventSavedForUser} eventId={event.id} />
+          )}
         </div>
 
         <p className='text-xs'>{startDateToUSe}</p>
@@ -77,6 +99,7 @@ export default function EventCard({ event }: Props) {
           <EventMap lat={Number(location.lat)} lng={Number(location.lng)} />
         </div>
       )}
+      {isDeleteModalOpen && <DeleteModal setIsDeleteModalOpen={setIsDeleteModalOpen} handleUpdateListAfterDelete={handleUpdateListAfterDelete!}  />}
     </div>
   );
 }

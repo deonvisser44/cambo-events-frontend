@@ -1,15 +1,37 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import useFetch from '@/hooks/useFetch';
+import { addAccessTokenToInterceptor } from '@/services/axios-config';
+import { useDispatch } from 'react-redux';
+import {
+  setAuthToken,
+  setHasAccessTokenBeenAddedToInterceptor,
+  setIsAuthenticated,
+  setUserId,
+} from '@/store/user';
+import { UserAuthResponseUserDataType } from '@/utils/types';
+import { useRouter } from 'next/router';
 
 // https://developers.google.com/identity/gsi/web/reference/js-reference
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { handleGoogle, loading, error } = useFetch(
     'http://localhost:3009/user/login'
   );
 
   useEffect(() => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      const user: UserAuthResponseUserDataType = JSON.parse(userString);
+      addAccessTokenToInterceptor(user.token);
+      dispatch(setHasAccessTokenBeenAddedToInterceptor(true));
+      dispatch(setIsAuthenticated(true));
+      dispatch(setUserId(user.id));
+      dispatch(setAuthToken(user.token));
+      router.replace('/');
+    }
     /* global google */
     if ((global?.window as any).google) {
       (window as any).google.accounts.id.initialize({
@@ -34,7 +56,7 @@ export default function Login() {
 
   return (
     <div className='min-h-screen flex items-center justify-center'>
-        {loading ? <div>Loading....</div> : <div id='loginDiv'></div>}
+      {loading ? <div>Loading....</div> : <div id='loginDiv'></div>}
     </div>
   );
 }

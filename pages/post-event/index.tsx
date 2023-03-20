@@ -1,6 +1,5 @@
 import React from 'react';
-import { Formik, Field, Form, ErrorMessage, useFormik } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Field, ErrorMessage } from 'formik';
 import { DateTime } from 'ts-luxon';
 import PostEventMap from '@/components/events/post-event-map';
 import CategorySelect from '@/components/events/category-select';
@@ -8,45 +7,44 @@ import { useSelector } from 'react-redux';
 import { selectUserState } from '@/store/user';
 import { categoryOptions } from '@/utils/constants';
 import { calculateStartAndEndTimes } from '@/utils/helpers';
-import { submitEventType } from '@/utils/types';
+import { submitEventType, UserStateType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
+import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
+import { useRouter } from 'next/router';
 
-const initialFormValues = {
-  name: '',
-  description: '',
-  startDate: DateTime.local().toISODate(),
-  startTime: '12:00',
-  endDate: DateTime.local().toISODate(),
-  endTime: '00:00',
-  categories: [],
-  coords: { lat: 11.554032, lng: 104.924882 },
-};
-
-const inputStyles =
+const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
-const labelStyles = 'text-lg font-semibold text-gray-200 py-0 mt-1';
-const errorStyles = 'text-red-500';
-
-const validationSchema = Yup.object({
-  name: Yup.string()
-    .min(4, 'Must be 4 characters or more')
-    .max(30, 'Must be 30 characters or less')
-    .required('Required'),
-  description: Yup.string()
-    .max(300, 'Must be 300 characters or less')
-    .required('Required'),
-  startDate: Yup.date().required('Required'),
-  startTime: Yup.string(),
-  endDate: Yup.date(),
-  endTime: Yup.string(),
-  categories: Yup.array()
-    .min(1, 'Choose at least one category')
-    .max(3, 'Maximum three categories allowed'),
-});
+const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
+const ERROR_STYLES = 'text-red-500';
 
 export default function PostEvent() {
-  const userState = useSelector(selectUserState);
-  const { authToken, isUserAuthenticated } = userState;
+  const router = useRouter();
+  const userState: UserStateType = useSelector(selectUserState);
+  const { currentEvent } = userState;
+  const start = DateTime.fromJSDate(
+    new Date(currentEvent.start_date)
+  ).toISODate();
+  const end = DateTime.fromJSDate(new Date(currentEvent.end_date)).toISODate();
+  const selectedCategories = currentEvent.category.map((category) => {
+    return { label: category.toUpperCase(), value: category };
+  });
+  const startMilitaryTime = DateTime.fromJSDate(
+    new Date(currentEvent.start_date)
+  ).toFormat('hh:mm');
+  const endMilitaryTime = DateTime.fromJSDate(
+    new Date(currentEvent.end_date)
+  ).toFormat('hh:mm');
+
+  const initialFormValues = {
+    name: currentEvent?.name,
+    description: currentEvent?.description,
+    startDate: start,
+    startTime: startMilitaryTime,
+    endDate: end,
+    endTime: endMilitaryTime,
+    categories: selectedCategories,
+    coords: currentEvent?.location,
+  };
 
   const handleSubmitEvent = async (eventArgs: submitEventType) => {
     const {
@@ -74,7 +72,8 @@ export default function PostEvent() {
       start_date: start,
       end_date: end,
     };
-    const res = await camboEventsApi.post('/event', postEventBody);
+    await camboEventsApi.post('/event', postEventBody);
+    router.replace('/my-events');
   };
 
   return (
@@ -85,7 +84,7 @@ export default function PostEvent() {
       <div>
         <Formik
           initialValues={initialFormValues}
-          validationSchema={validationSchema}
+          validationSchema={EVENT_VALIDATION_SCHEMA}
           onSubmit={(values) => {
             handleSubmitEvent(values);
           }}
@@ -95,79 +94,83 @@ export default function PostEvent() {
               className='w-5/6 mx-auto flex flex-col gap-2'
               onSubmit={formik.handleSubmit}
             >
-              <label htmlFor='name' className={labelStyles}>
+              <label htmlFor='name' className={LABEL_STYLES}>
                 Name
               </label>
-              <ErrorMessage name='name' component='p' className={errorStyles} />
+              <ErrorMessage
+                name='name'
+                component='p'
+                className={ERROR_STYLES}
+              />
               <Field
                 name='name'
                 type='text'
-                className={inputStyles}
+                className={INPUT_STYLES}
                 placeholder='Event name'
               />
 
-              <label htmlFor='description' className={labelStyles}>
+              <label htmlFor='description' className={LABEL_STYLES}>
                 Description
               </label>
               <ErrorMessage
                 name='description'
                 component='p'
-                className={errorStyles}
+                className={ERROR_STYLES}
               />
               <Field
                 name='description'
                 as='textarea'
-                className={inputStyles + ' min-h-[150px]'}
+                className={INPUT_STYLES + ' min-h-[150px]'}
                 placeholder='Give details about the event and optionally paste a link to the Google Maps location'
               />
 
-              <label htmlFor='startDate' className={labelStyles}>
+              <label htmlFor='startDate' className={LABEL_STYLES}>
                 Start Date
               </label>
               <ErrorMessage
                 name='startDate'
                 component='p'
-                className={errorStyles}
+                className={ERROR_STYLES}
               />
-              <Field name='startDate' type='date' className={inputStyles} />
+              <Field name='startDate' type='date' className={INPUT_STYLES} />
 
-              <label htmlFor='startTime' className={labelStyles}>
+              <label htmlFor='startTime' className={LABEL_STYLES}>
                 Start Time
               </label>
               <ErrorMessage
                 name='startTime'
                 component='p'
-                className={errorStyles}
+                className={ERROR_STYLES}
               />
-              <Field name='startTime' type='time' className={inputStyles} />
+              <Field name='startTime' type='time' className={INPUT_STYLES} />
 
-              <label htmlFor='endDate' className={labelStyles}>
+              <label htmlFor='endDate' className={LABEL_STYLES}>
                 End Date
               </label>
               <ErrorMessage
                 name='endDate'
                 component='p'
-                className={errorStyles}
+                className={ERROR_STYLES}
               />
-              <Field name='endDate' type='date' className={inputStyles} />
+              <Field name='endDate' type='date' className={INPUT_STYLES} />
 
-              <label htmlFor='endTime' className={labelStyles}>
+              <label htmlFor='endTime' className={LABEL_STYLES}>
                 End Time
               </label>
               <ErrorMessage
                 name='endTime'
                 component='p'
-                className={errorStyles}
+                className={ERROR_STYLES}
               />
-              <Field name='endTime' type='time' className={inputStyles} />
+              <Field name='endTime' type='time' className={INPUT_STYLES} />
 
-              <label htmlFor='categories' className={labelStyles}>
+              <label htmlFor='categories' className={LABEL_STYLES}>
                 Categories
               </label>
               <ErrorMessage
                 name='categories'
                 component='p'
-                className={errorStyles}
+                className={ERROR_STYLES}
               />
               <Field
                 component={CategorySelect}
@@ -175,7 +178,7 @@ export default function PostEvent() {
                 options={categoryOptions}
               />
 
-              <label htmlFor='coords' className={labelStyles}>
+              <label htmlFor='coords' className={LABEL_STYLES}>
                 Location
               </label>
               <Field component={PostEventMap} name='coords' />

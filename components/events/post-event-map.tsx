@@ -3,8 +3,10 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import { FieldMetaProps, useField } from 'formik';
-import { MapClickEvent } from '@/utils/types';
+import { MapClickEvent, UserStateType } from '@/utils/types';
 import { locationIcon } from '@/utils/constants';
+import { useSelector } from 'react-redux';
+import { selectUserState } from '@/store/user';
 
 interface LocationMarkerProps {
   setValue: (value: any, shouldValidate?: boolean | undefined) => void;
@@ -36,12 +38,14 @@ interface PostEventProps {
 }
 
 export default function PostEventMap({ field: { name } }: PostEventProps) {
+  const userState: UserStateType = useSelector(selectUserState);
+  const { currentEvent: { location: {lat, lng } } } = userState;
   const [_, state, { setValue }] = useField(name);
 
   return (
     <div className='flex justify-center items-center text-lg w-full max-h-[250px] z-10'>
       <MapContainer
-        center={[11.554032, 104.924882]}
+        center={[Number(lat), Number(lng)]}
         zoom={15}
         scrollWheelZoom={false}
         className='z-0'

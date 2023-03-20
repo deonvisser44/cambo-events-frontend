@@ -3,11 +3,13 @@ import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
 import { UserAuthResponseUserDataType } from '@/utils/types';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const useFetch = (url: string) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleLogin = (user: UserAuthResponseUserDataType) => {
     if (user) {
@@ -15,7 +17,8 @@ const useFetch = (url: string) => {
       dispatch(setHasAccessTokenBeenAddedToInterceptor(true));
       dispatch(setIsAuthenticated(true));
       dispatch(setUserId(user.id));
-      dispatch(setAuthToken(user.token))
+      dispatch(setAuthToken(user.token));
+      router.replace('/');
     }
   };
 
@@ -37,7 +40,7 @@ const useFetch = (url: string) => {
       .then((data) => {
         if (data?.user) {
           localStorage.setItem('user', JSON.stringify(data?.user));
-          handleLogin(data.user)
+          handleLogin(data.user);
         }
 
         throw new Error(data?.message || data);
@@ -53,4 +56,3 @@ export default useFetch;
 function setHasAccessTokenBeenAddedToInterceptor(arg0: boolean): any {
   throw new Error('Function not implemented.');
 }
-

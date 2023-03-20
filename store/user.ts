@@ -1,6 +1,7 @@
-import { SavedEventType, UserStateType } from '@/utils/types';
+import { EventType, SavedEventType, UserStateType } from '@/utils/types';
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
+import { DateTime } from 'ts-luxon';
 
 const initialState: UserStateType = {
   user_id: '',
@@ -9,6 +10,17 @@ const initialState: UserStateType = {
   savedEvents: [],
   savedEventIds: [],
   hasAccessTokenBeenAddedToInterceptor: false,
+  currentEvent: {
+    id: '',
+    host_id: '',
+    name: '',
+    description: '',
+    start_date: DateTime.local().toISODate()!,
+    end_date: DateTime.local().toISODate()!,
+    location: { lat: 11.554032, lng: 104.924882 },
+    image: { url: '', path: '' },
+    category: [],
+  },
 };
 
 export const userSlice = createSlice({
@@ -30,9 +42,15 @@ export const userSlice = createSlice({
     setSavedEventIds: (state, action: PayloadAction<string[]>) => {
       state.savedEventIds = action.payload;
     },
-    setHasAccessTokenBeenAddedToInterceptor: (state, action: PayloadAction<boolean>) => {
+    setHasAccessTokenBeenAddedToInterceptor: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
       state.hasAccessTokenBeenAddedToInterceptor = action.payload;
-    }
+    },
+    setCurrentEvent: (state, action: PayloadAction<EventType>) => {
+      state.currentEvent = action.payload;
+    },
   },
 });
 
@@ -43,6 +61,7 @@ export const {
   setSavedEvents,
   setSavedEventIds,
   setHasAccessTokenBeenAddedToInterceptor,
+  setCurrentEvent,
 } = userSlice.actions;
 export const selectUserState = (state: any) => state.user;
 export default userSlice.reducer;
