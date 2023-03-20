@@ -1,12 +1,22 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import { useDispatch } from 'react-redux';
-import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectUserState,
+  setAuthToken,
+  setIsAuthenticated,
+  setUserId,
+} from '@/store/user';
 import { useEffect } from 'react';
-import { EventType, UserAuthResponseUserDataType } from '@/utils/types';
+import {
+  EventType,
+  UserAuthResponseUserDataType,
+  UserStateType,
+} from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
 import EventCard from '@/components/events/event-card';
+import AuthModal from '@/components/events/auth-modal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,6 +26,8 @@ interface Props {
 
 export default function Home({ events }: Props) {
   const dispatch = useDispatch();
+  const userState: UserStateType = useSelector(selectUserState);
+  const { isAuthModalOpen } = userState;
 
   const handleCheckAuthStatus = () => {
     const user = localStorage.getItem('user');
@@ -50,6 +62,7 @@ export default function Home({ events }: Props) {
             <EventCard key={index} event={event} />
           ))}
         </div>
+        {isAuthModalOpen && <AuthModal />}
       </main>
     </>
   );

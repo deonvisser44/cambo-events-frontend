@@ -1,6 +1,7 @@
 import { EventType } from './types';
 import { v4 as uuid } from 'uuid';
 import { Icon } from 'leaflet';
+import { DateTime } from 'ts-luxon';
 
 export const user = {
   id: 'some-id',
@@ -99,3 +100,15 @@ export const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
 export const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
 export const ERROR_STYLES = 'text-red-500';
+
+export const DEFAULT_CURRENT_EVENT_STATE = {
+  id: '',
+  host_id: '',
+  name: '',
+  description: '',
+  start_date: DateTime.local().toISODate()!,
+  end_date: DateTime.local().toISODate()!,
+  location: { lat: 11.554032, lng: 104.924882 },
+  image: { url: '', path: '' },
+  category: [],
+};

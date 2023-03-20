@@ -10,6 +10,7 @@ const initialState: UserStateType = {
   savedEvents: [],
   savedEventIds: [],
   hasAccessTokenBeenAddedToInterceptor: false,
+  isAuthModalOpen: false,
   currentEvent: {
     id: '',
     host_id: '',
@@ -51,6 +52,9 @@ export const userSlice = createSlice({
     setCurrentEvent: (state, action: PayloadAction<EventType>) => {
       state.currentEvent = action.payload;
     },
+    setIsAuthModalOpen: (state, action: PayloadAction<boolean>) => {
+      state.isAuthModalOpen = action.payload;
+    },
   },
 });
 
@@ -62,6 +66,7 @@ export const {
   setSavedEventIds,
   setHasAccessTokenBeenAddedToInterceptor,
   setCurrentEvent,
+  setIsAuthModalOpen,
 } = userSlice.actions;
 export const selectUserState = (state: any) => state.user;
 export default userSlice.reducer;

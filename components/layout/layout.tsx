@@ -13,7 +13,11 @@ import {
   setUserId,
 } from '@/store/user';
 import { useEffect } from 'react';
-import { SavedEventType, UserAuthResponseUserDataType, UserStateType } from '@/utils/types';
+import {
+  SavedEventType,
+  UserAuthResponseUserDataType,
+  UserStateType,
+} from '@/utils/types';
 import camboEventsApi, {
   addAccessTokenToInterceptor,
 } from '@/services/axios-config';

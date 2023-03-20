@@ -11,6 +11,7 @@ import {
 } from '@/store/user';
 import { UserAuthResponseUserDataType } from '@/utils/types';
 import { useRouter } from 'next/router';
+import LoadingSpinner from '@/components/layout/loading-spinner';
 
 // https://developers.google.com/identity/gsi/web/reference/js-reference
 
@@ -56,7 +57,7 @@ export default function Login() {
 
   return (
     <div className='min-h-screen flex items-center justify-center'>
-      {loading ? <div>Loading....</div> : <div id='loginDiv'></div>}
+      {loading ? <LoadingSpinner /> : <div id='loginDiv'></div>}
     </div>
   );
 }

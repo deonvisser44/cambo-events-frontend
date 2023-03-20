@@ -4,13 +4,17 @@ import * as Yup from 'yup';
 import { DateTime } from 'ts-luxon';
 import PostEventMap from '@/components/events/post-event-map';
 import CategorySelect from '@/components/events/category-select';
-import { useSelector } from 'react-redux';
-import { selectUserState } from '@/store/user';
-import { categoryOptions } from '@/utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserState, setCurrentEvent } from '@/store/user';
+import {
+  categoryOptions,
+  DEFAULT_CURRENT_EVENT_STATE,
+} from '@/utils/constants';
 import { calculateStartAndEndTimes } from '@/utils/helpers';
 import { submitEventType, UserStateType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
 import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
+import { useRouter } from 'next/router';
 
 const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
@@ -18,6 +22,8 @@ const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
 const ERROR_STYLES = 'text-red-500';
 
 export default function EditEventPage() {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const userState: UserStateType = useSelector(selectUserState);
   const { currentEvent } = userState;
   const start = DateTime.fromJSDate(
@@ -73,6 +79,8 @@ export default function EditEventPage() {
       end_date: end,
     };
     await camboEventsApi.put('/event', postEventBody);
+    dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
+    router.replace('/my-events');
   };
 
   if (!currentEvent) {
@@ -83,7 +91,7 @@ export default function EditEventPage() {
     return (
       <div className='min-h-screen py-3'>
         <h3 className='text-3xl font-semibold text-center text-purple-500'>
-          Post Event
+          Edit Event
         </h3>
         <div>
           <Formik

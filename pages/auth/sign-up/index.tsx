@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import useFetch from '@/hooks/useFetch';
+import LoadingSpinner from '@/components/layout/loading-spinner';
 
 // https://developers.google.com/identity/gsi/web/reference/js-reference
 
@@ -34,7 +35,7 @@ export default function SignUp() {
   return (
     <div className='min-h-screen flex items-center justify-center'>
       {loading ? (
-        <div>Loading....</div>
+        <LoadingSpinner /> 
       ) : (
         <div id='signUpDiv' data-text='signup_with'></div>
       )}

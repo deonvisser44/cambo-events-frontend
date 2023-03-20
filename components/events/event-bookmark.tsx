@@ -1,5 +1,5 @@
 import camboEventsApi from '@/services/axios-config';
-import { selectUserState, setSavedEvents } from '@/store/user';
+import { selectUserState, setIsAuthModalOpen, setSavedEvents } from '@/store/user';
 import { UserStateType } from '@/utils/types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,13 +15,17 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
   const dispatch = useDispatch();
   const [isSaved, setIsSaved] = useState(isSavedForUser);
   const userState: UserStateType = useSelector(selectUserState);
-  const { savedEvents } = userState;
+  const { savedEvents, isUserAuthenticated } = userState;
 
   const markEventAsSaved = async (eventId: string) => {
-    await camboEventsApi.post('/event/saved', {
-      event_id: eventId,
-    });
-    setIsSaved(true);
+    if (isUserAuthenticated) {
+      await camboEventsApi.post('/event/saved', {
+        event_id: eventId,
+      });
+      setIsSaved(true);
+    } else {
+      dispatch(setIsAuthModalOpen(true))
+    }
   };
 
   const removeAsSaved = async (eventId: string) => {
@@ -32,7 +36,7 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
     const remainingSavedEvents = savedEvents.filter(
       (savedEvent) => savedEvent.event.id !== eventId
     );
-    console.log({ remainingSavedEvents, eventId })
+    console.log({ remainingSavedEvents, eventId });
     dispatch(setSavedEvents(remainingSavedEvents));
   };
 

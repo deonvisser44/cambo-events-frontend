@@ -71,4 +71,5 @@ export interface UserStateType {
   savedEventIds: string[];
   hasAccessTokenBeenAddedToInterceptor: boolean;
   currentEvent: EventType;
+  isAuthModalOpen: boolean;
 }

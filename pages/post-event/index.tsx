@@ -11,6 +11,7 @@ import { submitEventType, UserStateType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
 import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
+import LoginPrompt from '@/components/events/login-prompt';
 
 const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
@@ -20,7 +21,7 @@ const ERROR_STYLES = 'text-red-500';
 export default function PostEvent() {
   const router = useRouter();
   const userState: UserStateType = useSelector(selectUserState);
-  const { currentEvent } = userState;
+  const { currentEvent, isUserAuthenticated } = userState;
   const start = DateTime.fromJSDate(
     new Date(currentEvent.start_date)
   ).toISODate();
@@ -75,6 +76,10 @@ export default function PostEvent() {
     await camboEventsApi.post('/event', postEventBody);
     router.replace('/my-events');
   };
+
+  if (!isUserAuthenticated) {
+    return <LoginPrompt text='Please login to post an event.' />;
+  }
 
   return (
     <div className='min-h-screen py-3'>

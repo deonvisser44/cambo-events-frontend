@@ -1,4 +1,5 @@
 import EventCard from '@/components/events/event-card';
+import LoginPrompt from '@/components/events/login-prompt';
 import camboEventsApi from '@/services/axios-config';
 import { selectUserState } from '@/store/user';
 import { EventType, UserStateType } from '@/utils/types';
@@ -29,6 +30,10 @@ export default function MyEvents() {
       fetchUserCreatedEvents();
     }
   }, []);
+
+  if (!isUserAuthenticated) {
+    return <LoginPrompt text='Please login to see your events.' />
+  }
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>

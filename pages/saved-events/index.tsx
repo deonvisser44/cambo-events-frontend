@@ -1,12 +1,13 @@
 import EventCard from '@/components/events/event-card';
+import LoginPrompt from '@/components/events/login-prompt';
 import camboEventsApi from '@/services/axios-config';
 import {
   selectUserState,
   setSavedEventIds,
   setSavedEvents,
 } from '@/store/user';
-import { EventType, SavedEventType, UserStateType } from '@/utils/types';
-import React, { useEffect, useState } from 'react';
+import { SavedEventType, UserStateType } from '@/utils/types';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function SavedEvents() {
@@ -28,6 +29,10 @@ export default function SavedEvents() {
       fetchSavedEvents();
     }
   }, []);
+
+  if (!isUserAuthenticated) {
+    return <LoginPrompt text='Please login to see your saved events.' />;
+  }
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>
