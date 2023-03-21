@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import MobileNavButton from './mobile-nav-button';
-import React, { useState, useRef } from 'react';
-import { Transition } from '@headlessui/react';
+import React, { useState, useRef, useEffect } from 'react';
 import DesktopNavButton from './desktop-nav-button';
 import { useSelector } from 'react-redux';
 import { selectUserState } from '@/store/user';
@@ -9,6 +8,7 @@ import { UserStateType } from '@/utils/types';
 import MobileLogoutButton from './mobile-logout-button';
 import DesktopLogoutButton from './desktop-logout-button';
 import { useRouter } from 'next/router';
+import logo from '@/images/camboevents.png'
 
 export default function NavBar() {
   const router = useRouter();
@@ -20,17 +20,25 @@ export default function NavBar() {
     router.replace('/');
   };
 
+  // disable scroll when mobile menu is open
+  useEffect(() => {
+    isOpen
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = 'auto');
+  }, [isOpen]);
+
   return (
     <nav className='bg-gray-800 z-50'>
+      {/* desktop nav */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-16'>
           <div className='flex items-center'>
             <div className='flex-shrink-0'>
               <button onClick={handleNavigateToHome}>
                 <Image
-                  className='h-8 w-8'
-                  src='https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg'
-                  alt='Workflow'
+                  className='h-8 w-fit'
+                  src={logo}
+                  alt='Cambo Events logo'
                   width={50}
                   height={50}
                 />
@@ -98,27 +106,14 @@ export default function NavBar() {
         </div>
       </div>
 
-      <Transition
-        show={isOpen}
-        enter='transition ease-out duration-100 transform'
-        enterFrom='opacity-0 scale-95'
-        enterTo='opacity-100 scale-100'
-        leave='transition ease-in duration-75 transform'
-        leaveFrom='opacity-100 scale-100'
-        leaveTo='opacity-0 scale-95'
-        style={{ zIndex: 1000 }}
-      >
+      {/* mobile drop down nav */}
+      {isOpen && (
         <div
           className='md:hidden fixed z-50 bg-gray-800 w-[100%]'
           id='mobile-menu'
-          style={{ zIndex: 1000 }}
         >
-          <div ref={navRev} className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
-            <MobileNavButton
-              setIsOpen={setIsOpen}
-              label='Events'
-              path='/'
-            />
+          <div ref={navRev} className='px-2 pt-2 pb-3 space-y-1 sm:px-3 z-20'>
+            <MobileNavButton setIsOpen={setIsOpen} label='Events' path='/' />
             <MobileNavButton
               setIsOpen={setIsOpen}
               label='Post Event'
@@ -150,7 +145,7 @@ export default function NavBar() {
             )}
           </div>
         </div>
-      </Transition>
+      )}
     </nav>
   );
 }

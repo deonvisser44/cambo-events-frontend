@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Inter } from 'next/font/google';
+import 'leaflet/dist/leaflet.css';
 import Script from 'next/script';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,7 +8,7 @@ import {
   setIsAuthenticated,
   setUserId,
 } from '@/store/user';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   EventType,
   UserAuthResponseUserDataType,
@@ -17,8 +17,13 @@ import {
 import camboEventsApi from '@/services/axios-config';
 import EventCard from '@/components/events/event-card';
 import AuthModal from '@/components/events/auth-modal';
+import dynamic from 'next/dynamic';
+import LoadingSpinner from '@/components/layout/loading-spinner';
 
-const inter = Inter({ subsets: ['latin'] });
+const CategorySearch = dynamic(() => import('@/components/events/category-search'), {
+  loading: () => <LoadingSpinner />,
+  ssr: false,
+});
 
 interface Props {
   events: EventType[];
@@ -28,6 +33,9 @@ export default function Home({ events }: Props) {
   const dispatch = useDispatch();
   const userState: UserStateType = useSelector(selectUserState);
   const { isAuthModalOpen } = userState;
+  const [searchResults, setSearchResults] = useState<EventType[]>([]);
+  const [hasSearchedForEvents, setHasSearchedForEvents] = useState(false);
+  const eventsToDisplay = hasSearchedForEvents ? searchResults : events;
 
   const handleCheckAuthStatus = () => {
     const user = localStorage.getItem('user');
@@ -57,8 +65,12 @@ export default function Home({ events }: Props) {
       </Head>
       <main className='min-h-screen min-w-screen'>
         <Script src='https://accounts.google.com/gsi/client' async defer />
+        <CategorySearch
+          setHasSearchedForEvents={setHasSearchedForEvents}
+          setSearchResults={setSearchResults}
+        />
         <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>
-          {events.map((event, index) => (
+          {eventsToDisplay.map((event, index) => (
             <EventCard key={index} event={event} />
           ))}
         </div>

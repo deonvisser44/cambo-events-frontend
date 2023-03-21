@@ -17,7 +17,7 @@ import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
 
 const INPUT_STYLES =
-  'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
+  'p-1 rounded-md border border-gray-400 text-lg outline-purple';
 const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
 const ERROR_STYLES = 'text-red-500';
 
@@ -90,7 +90,7 @@ export default function EditEventPage() {
   } else {
     return (
       <div className='min-h-screen py-3'>
-        <h3 className='text-3xl font-semibold text-center text-purple-500'>
+        <h3 className='text-3xl font-semibold text-center text-purple'>
           Edit Event
         </h3>
         <div>
@@ -198,7 +198,7 @@ export default function EditEventPage() {
                 <button
                   type='submit'
                   disabled={!formik.isValid}
-                  className='p-2 bg-purple-500 disabled:bg-purple-300 rounded-md text-xl text-white mt-2'
+                  className='p-2 bg-purple disabled:bg-purple-300 rounded-md text-xl text-white mt-2'
                 >
                   Save Changes
                 </button>

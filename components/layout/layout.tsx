@@ -21,6 +21,8 @@ import {
 import camboEventsApi, {
   addAccessTokenToInterceptor,
 } from '@/services/axios-config';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   children: JSX.Element;
@@ -69,6 +71,7 @@ export default function Layout({ children }: Props) {
       <Navbar />
       {children}
       <Footer />
+      <ToastContainer />
     </div>
   );
 }

@@ -1,9 +1,8 @@
 import { EventType, UserStateType } from '@/utils/types';
-import React, { useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { DateTime } from 'ts-luxon';
 import Close from '../icons/close';
 import Expand from '../icons/expand';
-import 'leaflet/dist/leaflet.css';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserState, setCurrentEvent } from '@/store/user';
@@ -12,31 +11,30 @@ import { useRouter } from 'next/router';
 import EditButton from './edit-button';
 import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
+import LoadingSpinner from '../layout/loading-spinner';
 
-const EventMap = dynamic(() => import('./event-map'), { ssr: false });
+const EventMap = dynamic(() => import('./event-map'), {
+  loading: () => <LoadingSpinner />,
+  ssr: false,
+});
 
 interface Props {
   event: EventType;
   handleUpdateListAfterDelete?: () => void;
 }
 
-export default function EventCard({ event, handleUpdateListAfterDelete }: Props) {
+export default function EventCard({
+  event,
+  handleUpdateListAfterDelete,
+}: Props) {
   const router = useRouter();
   const userState: UserStateType = useSelector(selectUserState);
   const dispatch = useDispatch();
   const { savedEventIds } = userState;
   const [isShowMoreOpen, setIsShowMoreOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const {
-    id,
-    name,
-    description,
-    location,
-    image,
-    start_date,
-    end_date,
-    category,
-  } = event;
+  const { id, name, description, location, start_date, end_date, category } =
+    event;
   const luxonStartDate = DateTime.fromISO(new Date(start_date).toISOString());
   const startDateToUSe = luxonStartDate.toLocaleString(DateTime.DATETIME_MED);
   const luxonEndDate = DateTime.fromISO(new Date(end_date).toISOString());
@@ -99,7 +97,12 @@ export default function EventCard({ event, handleUpdateListAfterDelete }: Props)
           <EventMap lat={Number(location.lat)} lng={Number(location.lng)} />
         </div>
       )}
-      {isDeleteModalOpen && <DeleteModal setIsDeleteModalOpen={setIsDeleteModalOpen} handleUpdateListAfterDelete={handleUpdateListAfterDelete!}  />}
+      {isDeleteModalOpen && (
+        <DeleteModal
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          handleUpdateListAfterDelete={handleUpdateListAfterDelete!}
+        />
+      )}
     </div>
   );
 }

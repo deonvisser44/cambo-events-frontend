@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { Icon } from 'leaflet';
 import { DateTime } from 'ts-luxon';
 
+const purple = '#7336ED';
+
 export const user = {
   id: 'some-id',
 };
@@ -97,7 +99,7 @@ export const locationIcon = new Icon({
 });
 
 export const INPUT_STYLES =
-  'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
+  'p-1 rounded-md border border-gray-400 text-lg outline-purple';
 export const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
 export const ERROR_STYLES = 'text-red-500';
 

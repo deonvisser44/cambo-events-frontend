@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import LoginPrompt from '@/components/events/login-prompt';
 
 const INPUT_STYLES =
-  'p-1 rounded-md border border-gray-400 text-lg outline-purple-600';
+  'p-1 rounded-md border border-gray-400 text-lg outline-purple';
 const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
 const ERROR_STYLES = 'text-red-500';
 
@@ -83,7 +83,7 @@ export default function PostEvent() {
 
   return (
     <div className='min-h-screen py-3'>
-      <h3 className='text-3xl font-semibold text-center text-purple-500'>
+      <h3 className='text-3xl font-semibold text-center text-purple'>
         Post Event
       </h3>
       <div>

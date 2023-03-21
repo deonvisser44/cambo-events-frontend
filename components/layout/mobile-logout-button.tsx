@@ -1,7 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
-import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import {
+  setAuthToken,
+  setIsAuthenticated,
+  setSavedEventIds,
+  setSavedEvents,
+  setUserId,
+} from '@/store/user';
 
 interface Props {
   setIsOpen: (value: boolean) => void;
@@ -15,6 +21,8 @@ export default function MobileLogoutButton({ setIsOpen }: Props) {
     dispatch(setIsAuthenticated(false));
     dispatch(setUserId(''));
     dispatch(setAuthToken(''));
+    dispatch(setSavedEventIds([]));
+    dispatch(setSavedEvents([]));
   };
 
   return (

@@ -6,7 +6,11 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        purple: '#7336ED',
+      },
+    },
   },
   plugins: [require('tailwindcss-aria-attributes')],
 };
