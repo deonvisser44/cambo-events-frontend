@@ -1,6 +1,5 @@
 import React from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
 import { DateTime } from 'ts-luxon';
 import PostEventMap from '@/components/events/post-event-map';
 import CategorySelect from '@/components/events/category-select';
@@ -15,6 +14,7 @@ import { submitEventType, UserStateType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
 import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple';
@@ -78,7 +78,12 @@ export default function EditEventPage() {
       start_date: start,
       end_date: end,
     };
-    await camboEventsApi.put('/event', postEventBody);
+    const { status } = await camboEventsApi.put('/event', postEventBody);
+    if (status === 200) {
+      toast.success('Event updated')
+    } else {
+      toast.warn('Failed to update event')
+    }
     dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
     router.replace('/my-events');
   };
@@ -89,7 +94,7 @@ export default function EditEventPage() {
     );
   } else {
     return (
-      <div className='min-h-screen py-3'>
+      <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
         <h3 className='text-3xl font-semibold text-center text-purple'>
           Edit Event
         </h3>

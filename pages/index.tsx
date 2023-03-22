@@ -18,10 +18,8 @@ import camboEventsApi from '@/services/axios-config';
 import EventCard from '@/components/events/event-card';
 import AuthModal from '@/components/events/auth-modal';
 import dynamic from 'next/dynamic';
-import LoadingSpinner from '@/components/layout/loading-spinner';
 
 const CategorySearch = dynamic(() => import('@/components/events/category-search'), {
-  loading: () => <LoadingSpinner />,
   ssr: false,
 });
 
@@ -69,7 +67,7 @@ export default function Home({ events }: Props) {
           setHasSearchedForEvents={setHasSearchedForEvents}
           setSearchResults={setSearchResults}
         />
-        <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>
+        <div className='min-h-screen md:min-h-fit flex flex-col md:grid md:grid-cols-2 items-center md:items-start md:w-3/5 md:mt-10 my-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
           {eventsToDisplay.map((event, index) => (
             <EventCard key={index} event={event} />
           ))}

@@ -15,6 +15,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const navRev = useRef<HTMLDivElement>(null);
   const userState: UserStateType = useSelector(selectUserState);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleNavigateToHome = () => {
     router.replace('/');
@@ -27,8 +28,21 @@ export default function NavBar() {
       : (document.body.style.overflow = 'auto');
   }, [isOpen]);
 
+  // close mobile menu if clicked outside nav component
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent): void {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+
   return (
-    <nav className='bg-gray-800 z-50'>
+    <nav ref={ref} className='bg-gray-800 z-50'>
       {/* desktop nav */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-16'>

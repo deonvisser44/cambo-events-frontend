@@ -35,10 +35,12 @@ export default function SavedEvents() {
   }
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>
-      {savedEvents.map((savedEvent, index) => (
-        <EventCard key={index} event={savedEvent.event} />
-      ))}
-    </div>
+    <main className='min-h-screen min-w-screen'>
+      <div className='min-h-screen md:min-h-fit flex flex-col md:grid md:grid-cols-2 items-center md:items-start md:w-3/5 md:mt-10 my-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
+        {savedEvents.map((savedEvent, index) => (
+          <EventCard key={index} event={savedEvent.event} />
+        ))}
+      </div>
+    </main>
   );
 }

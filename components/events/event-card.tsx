@@ -11,10 +11,15 @@ import { useRouter } from 'next/router';
 import EditButton from './edit-button';
 import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
+import { MobileView, isBrowser, isMobile } from 'react-device-detect';
 import LoadingSpinner from '../layout/loading-spinner';
+// import EventModal from './event-modal';
 
 const EventMap = dynamic(() => import('./event-map'), {
-  loading: () => <LoadingSpinner />,
+  ssr: false,
+});
+
+const EventModal = dynamic(() => import('./event-modal'), {
   ssr: false,
 });
 
@@ -33,6 +38,8 @@ export default function EventCard({
   const { savedEventIds } = userState;
   const [isShowMoreOpen, setIsShowMoreOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [shouldShowOpenButton, setShouldShowOpenButton] = useState(false);
   const { id, name, description, location, start_date, end_date, category } =
     event;
   const luxonStartDate = DateTime.fromISO(new Date(start_date).toISOString());
@@ -42,8 +49,17 @@ export default function EventCard({
   const isEventSavedForUser = savedEventIds.includes(id);
   const isOnMyEventsPage = router.pathname.includes('my-events');
 
+  useEffect(() => {
+    setShouldShowOpenButton(isMobile);
+    console.log({ isMobile })
+  }, []);
+
   const toggleShowMore = () => {
-    setIsShowMoreOpen((prevState) => !prevState);
+    if (shouldShowOpenButton) {
+      setIsShowMoreOpen((prevState) => !prevState);
+    } else {
+      setIsEventModalOpen(true);
+    }
   };
 
   const handleDeleteIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,7 +69,7 @@ export default function EventCard({
   };
 
   return (
-    <div className='border border-gray-400 w-[90%] flex flex-col rounded-lg bg-slate-400'>
+    <div className='border border-gray-400 w-[90%] md:w-full flex flex-col rounded-lg bg-slate-400'>
       <div onClick={toggleShowMore} className='px-2 py-2 gap-1 flex flex-col'>
         <div className='flex justify-between'>
           <h1 className='text-lg font-semibold'>{name}</h1>
@@ -79,12 +95,14 @@ export default function EventCard({
           ))}
         </div>
       </div>
-      <button
-        onClick={toggleShowMore}
-        className='underline w-full bg-slate-300 text-black flex justify-center rounded-md'
-      >
-        {isShowMoreOpen ? <Close /> : <Expand />}
-      </button>
+      {shouldShowOpenButton && (
+        <button
+          onClick={toggleShowMore}
+          className='underline w-full bg-slate-300 text-black flex justify-center rounded-md'
+        >
+          {isShowMoreOpen ? <Close /> : <Expand />}
+        </button>
+      )}
       {isShowMoreOpen && (
         <div className='flex flex-col w-full px-2 gap-2 py-2'>
           <p className='text-sm'>{description}</p>
@@ -102,6 +120,9 @@ export default function EventCard({
           setIsDeleteModalOpen={setIsDeleteModalOpen}
           handleUpdateListAfterDelete={handleUpdateListAfterDelete!}
         />
+      )}
+      {isEventModalOpen && (
+        <EventModal event={event} setIsEventModalOpen={setIsEventModalOpen} />
       )}
     </div>
   );

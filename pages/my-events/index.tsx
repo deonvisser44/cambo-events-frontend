@@ -32,14 +32,20 @@ export default function MyEvents() {
   }, []);
 
   if (!isUserAuthenticated) {
-    return <LoginPrompt text='Please login to see your events.' />
+    return <LoginPrompt text='Please login to see your events.' />;
   }
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-start my-10 gap-3'>
-      {userEvents.map((event, index) => (
-        <EventCard key={index} event={event} handleUpdateListAfterDelete={handleUpdateListAfterDelete} />
-      ))}
-    </div>
+    <main className='min-h-screen min-w-screen'>
+      <div className='min-h-screen md:min-h-fit flex flex-col md:grid md:grid-cols-2 items-center md:items-start md:w-3/5 md:mt-10 my-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
+        {userEvents.map((event, index) => (
+          <EventCard
+            key={index}
+            event={event}
+            handleUpdateListAfterDelete={handleUpdateListAfterDelete}
+          />
+        ))}
+      </div>
+    </main>
   );
 }

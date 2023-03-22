@@ -43,7 +43,7 @@ export default function CategorySearch({
   return (
     <div>
       <Select
-        className='z-0 border-2 w-[90%] mx-auto mt-6 rounded-md border-purple'
+        className='z-0 border-2 w-[90%] md:w-1/5 mx-auto mt-6 rounded-md border-purple'
         menuPortalTarget={document.body}
         styles={{ menuPortal: (base) => ({ ...base, zIndex: 10 }) }}
         options={SELECT_OPTIONS}

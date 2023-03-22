@@ -12,6 +12,7 @@ import camboEventsApi from '@/services/axios-config';
 import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
 import LoginPrompt from '@/components/events/login-prompt';
+import { toast } from 'react-toastify';
 
 const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple';
@@ -73,7 +74,12 @@ export default function PostEvent() {
       start_date: start,
       end_date: end,
     };
-    await camboEventsApi.post('/event', postEventBody);
+    const { status } = await camboEventsApi.post('/event', postEventBody);
+    if (status === 201) {
+      toast.success('Event posted')
+    } else {
+      toast.warn('Failed to post event')
+    }
     router.replace('/my-events');
   };
 
@@ -82,7 +88,7 @@ export default function PostEvent() {
   }
 
   return (
-    <div className='min-h-screen py-3'>
+    <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
       <h3 className='text-3xl font-semibold text-center text-purple'>
         Post Event
       </h3>
@@ -191,7 +197,7 @@ export default function PostEvent() {
               <button
                 type='submit'
                 disabled={!formik.isValid}
-                className='p-2 bg-purple-500 disabled:bg-purple-300 rounded-md text-xl text-white mt-2'
+                className='p-2 bg-purple disabled:bg-violet-300 rounded-md text-xl text-white mt-2'
               >
                 Post Event
               </button>
