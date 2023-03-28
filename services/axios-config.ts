@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const camboEventsApi = axios.create({
-  baseURL: 'http://127.0.0.1:3009',
+  baseURL: process.env.NEXT_PUBLIC_API,
   headers: { accept: '*/*', 'Access-Control-Allow-Origin': '*' },
 });
 

@@ -19,7 +19,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { handleGoogle, loading, error } = useFetch(
-    'http://localhost:3009/user/login'
+    `${process.env.NEXT_PUBLIC_API}/user/login`
   );
 
   useEffect(() => {

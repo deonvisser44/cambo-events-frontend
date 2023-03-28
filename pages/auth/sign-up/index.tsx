@@ -7,7 +7,7 @@ import LoadingSpinner from '@/components/layout/loading-spinner';
 
 export default function SignUp() {
   const { handleGoogle, loading, error } = useFetch(
-    'http://localhost:3009/user/sign-up'
+    `${process.env.NEXT_PUBLIC_API}/user/sign-up`
   );
 
   useEffect(() => {
