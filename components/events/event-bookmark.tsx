@@ -36,7 +36,6 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
     const remainingSavedEvents = savedEvents.filter(
       (savedEvent) => savedEvent.event.id !== eventId
     );
-    console.log({ remainingSavedEvents, eventId });
     dispatch(setSavedEvents(remainingSavedEvents));
   };
 

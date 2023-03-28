@@ -7,6 +7,7 @@ import {
   setSavedEvents,
 } from '@/store/user';
 import { SavedEventType, UserStateType } from '@/utils/types';
+import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -32,6 +33,19 @@ export default function SavedEvents() {
 
   if (!isUserAuthenticated) {
     return <LoginPrompt text='Please login to see your saved events.' />;
+  } else if (savedEvents.length < 1) {
+    return (
+      <div className='flex flex-col justify-around items-center min-h-screen px-4'>
+        <p className='text-white text-2xl text-center'>
+          You haven&apos;t saved any events yet.
+        </p>
+        <Link href='/'>
+          <button className='rounded-lg bg-slate-500 text-white w-full py-1 px-4 text-lg hover:bg-slate-400 hover:scale-105 transition-all duration-200'>
+            See Events
+          </button>
+        </Link>
+      </div>
+    );
   }
 
   return (

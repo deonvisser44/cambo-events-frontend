@@ -11,9 +11,7 @@ import { useRouter } from 'next/router';
 import EditButton from './edit-button';
 import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
-import { MobileView, isBrowser, isMobile } from 'react-device-detect';
-import LoadingSpinner from '../layout/loading-spinner';
-// import EventModal from './event-modal';
+import { isBrowser, isMobile } from 'react-device-detect';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -35,23 +33,22 @@ export default function EventCard({
   const router = useRouter();
   const userState: UserStateType = useSelector(selectUserState);
   const dispatch = useDispatch();
+  const { id, name, description, location, start_date, end_date, category } =
+    event;
   const { savedEventIds } = userState;
   const [isShowMoreOpen, setIsShowMoreOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [shouldShowOpenButton, setShouldShowOpenButton] = useState(false);
-  const { id, name, description, location, start_date, end_date, category } =
-    event;
+  const [isEventSavedForUser, _] = useState(savedEventIds.includes(id));
   const luxonStartDate = DateTime.fromISO(new Date(start_date).toISOString());
   const startDateToUSe = luxonStartDate.toLocaleString(DateTime.DATETIME_MED);
   const luxonEndDate = DateTime.fromISO(new Date(end_date).toISOString());
   const EndDateToUSe = luxonEndDate.toLocaleString(DateTime.DATETIME_MED);
-  const isEventSavedForUser = savedEventIds.includes(id);
   const isOnMyEventsPage = router.pathname.includes('my-events');
 
   useEffect(() => {
     setShouldShowOpenButton(isMobile);
-    console.log({ isMobile })
   }, []);
 
   const toggleShowMore = () => {
@@ -69,7 +66,12 @@ export default function EventCard({
   };
 
   return (
-    <div className='border border-gray-400 w-[90%] md:w-full flex flex-col rounded-lg bg-slate-400'>
+    <div
+      className={`w-[90%] md:w-full flex flex-col rounded-lg bg-slate-400 ${
+        isBrowser &&
+        'hover:bg-violet-300 hover:shadow-xl cursor-pointer transition duration-300'
+      }`}
+    >
       <div onClick={toggleShowMore} className='px-2 py-2 gap-1 flex flex-col'>
         <div className='flex justify-between'>
           <h1 className='text-lg font-semibold'>{name}</h1>

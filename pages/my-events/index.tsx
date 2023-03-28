@@ -3,6 +3,7 @@ import LoginPrompt from '@/components/events/login-prompt';
 import camboEventsApi from '@/services/axios-config';
 import { selectUserState } from '@/store/user';
 import { EventType, UserStateType } from '@/utils/types';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -33,6 +34,19 @@ export default function MyEvents() {
 
   if (!isUserAuthenticated) {
     return <LoginPrompt text='Please login to see your events.' />;
+  } else if (userEvents.length < 1) {
+    return (
+      <div className='flex flex-col justify-around items-center min-h-screen px-4'>
+        <p className='text-white text-2xl text-center'>
+          You haven&apos;t posted any events yet.
+        </p>
+        <Link href='/post-event'>
+          <button className='rounded-lg bg-slate-500 text-white w-full py-1 px-4 text-lg hover:bg-slate-400 hover:scale-105 transition-all duration-200'>
+            Post Event
+          </button>
+        </Link>
+      </div>
+    );
   }
 
   return (

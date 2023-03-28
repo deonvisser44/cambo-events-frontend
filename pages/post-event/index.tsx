@@ -102,7 +102,7 @@ export default function PostEvent() {
         >
           {(formik) => (
             <form
-              className='w-5/6 mx-auto flex flex-col gap-2'
+              className='w-5/6 mx-auto flex flex-col gap-2 mb-6 mt-4'
               onSubmit={formik.handleSubmit}
             >
               <label htmlFor='name' className={LABEL_STYLES}>
@@ -197,7 +197,7 @@ export default function PostEvent() {
               <button
                 type='submit'
                 disabled={!formik.isValid}
-                className='p-2 bg-purple disabled:bg-violet-300 rounded-md text-xl text-white mt-2'
+                className='p-2 bg-purple hover:bg-violet-500 disabled:bg-violet-300 rounded-md text-xl text-white mt-2'
               >
                 Post Event
               </button>

@@ -23,6 +23,12 @@ import camboEventsApi, {
 } from '@/services/axios-config';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Montserrat } from 'next/font/google'
+
+const montserrat = Montserrat({
+  subsets: ['cyrillic'],
+  variable: '--font-montserrat',
+})
 
 interface Props {
   children: JSX.Element;
@@ -66,7 +72,7 @@ export default function Layout({ children }: Props) {
   }, []);
 
   return (
-    <div className='w-full h-full min-h-screen bg-gradient-to-tl from-purple via-slate-700 to-slate-900'>
+    <div className={`w-full h-full min-h-screen bg-gradient-to-tl from-purple via-slate-700 to-slate-900 ${montserrat.variable} font-mono`}>
       <Script src='https://accounts.google.com/gsi/client' async defer />
       <Navbar />
       {children}

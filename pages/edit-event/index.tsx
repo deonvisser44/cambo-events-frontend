@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { DateTime } from 'ts-luxon';
 import PostEventMap from '@/components/events/post-event-map';
@@ -40,6 +40,10 @@ export default function EditEventPage() {
     new Date(currentEvent.end_date)
   ).toFormat('hh:mm');
 
+  useEffect(() => {
+    dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
+  }, []);
+
   const initialFormValues = {
     name: currentEvent?.name,
     description: currentEvent?.description,
@@ -80,9 +84,9 @@ export default function EditEventPage() {
     };
     const { status } = await camboEventsApi.put('/event', postEventBody);
     if (status === 200) {
-      toast.success('Event updated')
+      toast.success('Event updated');
     } else {
-      toast.warn('Failed to update event')
+      toast.warn('Failed to update event');
     }
     dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
     router.replace('/my-events');
@@ -108,7 +112,7 @@ export default function EditEventPage() {
           >
             {(formik) => (
               <form
-                className='w-5/6 mx-auto flex flex-col gap-2'
+                className='w-5/6 mx-auto flex flex-col gap-2 mb-6 mt-4'
                 onSubmit={formik.handleSubmit}
               >
                 <label htmlFor='name' className={LABEL_STYLES}>
@@ -203,7 +207,7 @@ export default function EditEventPage() {
                 <button
                   type='submit'
                   disabled={!formik.isValid}
-                  className='p-2 bg-purple disabled:bg-purple-300 rounded-md text-xl text-white mt-2'
+                  className='p-2 bg-purple hover:bg-violet-500 disabled:bg-violet-300 rounded-md text-xl text-white mt-2 mb-6'
                 >
                   Save Changes
                 </button>

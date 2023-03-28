@@ -1,9 +1,11 @@
 import CopyIcon from '@/components/icons/copy';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 export default function ContactPage() {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('deonvisser@protonmail.com');
+    toast.info('Copied to clipboard');
   };
 
   return (

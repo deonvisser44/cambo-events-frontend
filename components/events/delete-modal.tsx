@@ -31,7 +31,7 @@ export default function DeleteModal({ setIsDeleteModalOpen, handleUpdateListAfte
       onClick={() => setIsDeleteModalOpen(false)}
     >
       <div
-        className=' bg-slate-600 rounded-md gap-5 flex flex-col justify-around p-4 mx-auto my-auto w-4/5 md:w-1/5 min-h-[350px] md:min-h-[300px]'
+        className='bg-slate-600 rounded-md gap-5 flex flex-col justify-around p-4 mx-auto my-auto w-4/5 md:w-1/5 min-h-[350px] md:min-h-[300px]'
         onClick={handleModalDivClick}
       >
         <p className='text-xl font-semibold text-center text-white'>
@@ -39,13 +39,13 @@ export default function DeleteModal({ setIsDeleteModalOpen, handleUpdateListAfte
         </p>
         <div className='grid grid-cols-2 gap-2 w-full'>
           <button
-            className='text-lg bg-gray-400 text-white px-3 py-1 rounded-md'
+            className='text-lg bg-gray-400 hover:bg-gray-300 text-white px-3 py-1 rounded-md'
             onClick={() => setIsDeleteModalOpen(false)}
           >
             Cancel
           </button>
           <button
-            className='text-lg bg-red-500 text-white px-3 py-1 rounded-md'
+            className='text-lg bg-red-500 hover:bg-red-400 text-white px-3 py-1 rounded-md'
             onClick={handleDelete}
           >
             Delete

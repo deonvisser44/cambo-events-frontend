@@ -8,7 +8,7 @@ import { UserStateType } from '@/utils/types';
 import MobileLogoutButton from './mobile-logout-button';
 import DesktopLogoutButton from './desktop-logout-button';
 import { useRouter } from 'next/router';
-import logo from '@/images/camboevents.png'
+import neonLogo from '@/images/cambo-events-neon-logo.svg';
 
 export default function NavBar() {
   const router = useRouter();
@@ -46,31 +46,34 @@ export default function NavBar() {
       {/* desktop nav */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-16'>
-          <div className='flex items-center'>
-            <div className='flex-shrink-0'>
-              <button onClick={handleNavigateToHome}>
-                <Image
-                  className='h-8 w-fit'
-                  src={logo}
-                  alt='Cambo Events logo'
-                  width={50}
-                  height={50}
-                />
-              </button>
+          <div className='flex items-center justify-between w-full'>
+            <div className='flex'>
+              <div className='flex-shrink-0'>
+                <button onClick={handleNavigateToHome}>
+                  <Image
+                    className='h-8 w-fit'
+                    src={neonLogo}
+                    alt='Cambo Events logo'
+                    width={50}
+                    height={50}
+                  />
+                </button>
+              </div>
+              <div className='hidden md:block'>
+                <div className='ml-10 flex items-baseline space-x-4'>
+                  <DesktopNavButton label='Events' path='/' />
+                  <DesktopNavButton label='Post Event' path='/post-event' />
+                  <DesktopNavButton label='Saved Events' path='/saved-events' />
+                  <DesktopNavButton label='My Events' path='/my-events' />
+                </div>
+              </div>
             </div>
             <div className='hidden md:block'>
-              <div className='ml-10 flex items-baseline space-x-4'>
-                <DesktopNavButton label='Events' path='/' />
-                <DesktopNavButton label='Post Event' path='/post-event' />
-                <DesktopNavButton label='Saved Events' path='/saved-events' />
-                <DesktopNavButton label='My Events' path='/my-events' />
-                <DesktopNavButton label='Contact' path='/contact' />
-                {userState?.isUserAuthenticated ? (
-                  <DesktopLogoutButton />
-                ) : (
-                  <DesktopNavButton label='Login / Sign Up' path='/auth' />
-                )}
-              </div>
+              {userState?.isUserAuthenticated ? (
+                <DesktopLogoutButton />
+              ) : (
+                <DesktopNavButton label='Login / Sign Up' path='/auth' />
+              )}
             </div>
           </div>
           <div className='-mr-2 flex md:hidden'>
@@ -142,11 +145,6 @@ export default function NavBar() {
               setIsOpen={setIsOpen}
               label='My Events'
               path='/my-events'
-            />
-            <MobileNavButton
-              setIsOpen={setIsOpen}
-              label='Contact'
-              path='/contact'
             />
             {userState?.isUserAuthenticated ? (
               <MobileLogoutButton setIsOpen={setIsOpen} />

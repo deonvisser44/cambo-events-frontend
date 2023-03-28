@@ -1,3 +1,5 @@
+const { fontFamily } = require('tailwindcss/defaultTheme')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,6 +11,9 @@ module.exports = {
     extend: {
       colors: {
         purple: '#7336ED',
+      },
+      fontFamily: {
+        mono: ['var(--font-montserrat)', ...fontFamily.mono],
       },
     },
   },
