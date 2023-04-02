@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import { FieldMetaProps, useField } from 'formik';

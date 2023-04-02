@@ -28,8 +28,11 @@ export default function SavedEvents() {
   useEffect(() => {
     if (isUserAuthenticated) {
       fetchSavedEvents();
+    } else {
+      setSavedEventIds([]);
+      setSavedEvents([]);
     }
-  }, []);
+  }, [isUserAuthenticated]);
 
   if (!isUserAuthenticated) {
     return <LoginPrompt text='Please login to see your saved events.' />;

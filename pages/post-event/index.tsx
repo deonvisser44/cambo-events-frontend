@@ -1,7 +1,6 @@
 import React from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { DateTime } from 'ts-luxon';
-import PostEventMap from '@/components/events/post-event-map';
 import CategorySelect from '@/components/events/category-select';
 import { useSelector } from 'react-redux';
 import { selectUserState } from '@/store/user';
@@ -13,6 +12,11 @@ import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
 import LoginPrompt from '@/components/events/login-prompt';
 import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
+
+const PostEventMap = dynamic(() => import('@/components/events/post-event-map'), {
+  ssr: false,
+});
 
 const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple';

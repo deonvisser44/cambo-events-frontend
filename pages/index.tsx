@@ -18,10 +18,14 @@ import camboEventsApi from '@/services/axios-config';
 import EventCard from '@/components/events/event-card';
 import AuthModal from '@/components/events/auth-modal';
 import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
 
-const CategorySearch = dynamic(() => import('@/components/events/category-search'), {
-  ssr: false,
-});
+const CategorySearch = dynamic(
+  () => import('@/components/events/category-search'),
+  {
+    ssr: false,
+  }
+);
 
 interface Props {
   events: EventType[];
@@ -80,8 +84,9 @@ export default function Home({ events }: Props) {
 
 export async function getServerSideProps() {
   const response = await camboEventsApi.get('/event');
+  console.log('Getting events');
   const events = response.data;
-
+  console.log({ events });
   return {
     props: {
       events,

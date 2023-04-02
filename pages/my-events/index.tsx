@@ -29,8 +29,10 @@ export default function MyEvents() {
   useEffect(() => {
     if (isUserAuthenticated) {
       fetchUserCreatedEvents();
+    } else {
+      setUserEvents([]);
     }
-  }, []);
+  }, [isUserAuthenticated]);
 
   if (!isUserAuthenticated) {
     return <LoginPrompt text='Please login to see your events.' />;
