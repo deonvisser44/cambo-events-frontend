@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import 'leaflet/dist/leaflet.css';
 import Script from 'next/script';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,7 +17,6 @@ import camboEventsApi from '@/services/axios-config';
 import EventCard from '@/components/events/event-card';
 import AuthModal from '@/components/events/auth-modal';
 import dynamic from 'next/dynamic';
-import 'leaflet/dist/leaflet.css';
 
 const CategorySearch = dynamic(
   () => import('@/components/events/category-search'),
@@ -84,9 +82,7 @@ export default function Home({ events }: Props) {
 
 export async function getServerSideProps() {
   const response = await camboEventsApi.get('/event');
-  console.log('Getting events');
   const events = response.data;
-  console.log({ events });
   return {
     props: {
       events,

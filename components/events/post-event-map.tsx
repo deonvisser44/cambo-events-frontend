@@ -38,7 +38,11 @@ interface PostEventProps {
 
 export default function PostEventMap({ field: { name } }: PostEventProps) {
   const userState: UserStateType = useSelector(selectUserState);
-  const { currentEvent: { location: {lat, lng } } } = userState;
+  const {
+    currentEvent: {
+      location: { lat, lng },
+    },
+  } = userState;
   const [_, state, { setValue }] = useField(name);
 
   return (
