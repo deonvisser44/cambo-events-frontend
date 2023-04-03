@@ -3,11 +3,11 @@ import { v4 as uuid } from 'uuid';
 // import { Icon } from 'leaflet';
 import { DateTime } from 'ts-luxon';
 let Leaflet;
+let Icon;
 if (typeof window !== 'undefined') {
   Leaflet =  require('leaflet')
+  Icon = Leaflet.Icon;
 }
-
-const { Icon } = Leaflet;
 
 export const user = {
   id: 'some-id',
