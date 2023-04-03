@@ -1,9 +1,13 @@
 import { EventType } from './types';
 import { v4 as uuid } from 'uuid';
-import { Icon } from 'leaflet';
+// import { Icon } from 'leaflet';
 import { DateTime } from 'ts-luxon';
+let Leaflet;
+if (typeof window !== 'undefined') {
+  Leaflet =  require('leaflet')
+}
 
-const purple = '#7336ED';
+const { Icon } = Leaflet;
 
 export const user = {
   id: 'some-id',

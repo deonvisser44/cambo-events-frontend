@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
 import { LatLngExpression } from 'leaflet';
 import { FieldMetaProps, useField } from 'formik';
 import { MapClickEvent, UserStateType } from '@/utils/types';
 import { locationIcon } from '@/utils/constants';
 import { useSelector } from 'react-redux';
 import { selectUserState } from '@/store/user';
+let Leaflet;
+if (typeof window !== 'undefined') {
+  Leaflet =  require('react-leaflet')
+}
+
+const { MapContainer, TileLayer, Marker, useMapEvents } = Leaflet
 
 interface LocationMarkerProps {
   setValue: (value: any, shouldValidate?: boolean | undefined) => void;
@@ -44,24 +49,31 @@ export default function PostEventMap({ field: { name } }: PostEventProps) {
     },
   } = userState;
   const [_, state, { setValue }] = useField(name);
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className='flex justify-center items-center text-lg w-full max-h-[250px] z-10'>
-      <MapContainer
-        center={[Number(lat), Number(lng)]}
-        zoom={15}
-        scrollWheelZoom={false}
-        className='z-0'
-        style={{
-          height: '200px',
-          width: '100%',
-          borderRadius: '8px',
-          zIndex: 10,
-        }}
-      >
-        <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-        <LocationMarkers setValue={setValue} state={state} />
-      </MapContainer>
+      {isMounted && (
+        <MapContainer
+          center={[Number(lat), Number(lng)]}
+          zoom={15}
+          scrollWheelZoom={false}
+          className='z-0'
+          style={{
+            height: '200px',
+            width: '100%',
+            borderRadius: '8px',
+            zIndex: 10,
+          }}
+        >
+          <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+          <LocationMarkers setValue={setValue} state={state} />
+        </MapContainer>
+      )}
     </div>
   );
 }

@@ -14,7 +14,7 @@ import LoginPrompt from '@/components/events/login-prompt';
 import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
 
-const PostEventMap = dynamic(() => import('@/components/events/post-event-map'), {
+const PostEventMap = dynamic(() => import('../../components/events/post-event-map'), {
   ssr: false,
 });
 

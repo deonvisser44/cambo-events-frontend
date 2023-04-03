@@ -1,6 +1,11 @@
 import React from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { locationIcon } from '@/utils/constants';
+let Leaflet;
+if (typeof window !== 'undefined') {
+  Leaflet =  require('react-leaflet')
+}
+
+const { MapContainer, TileLayer, Marker } = Leaflet
 
 interface Props {
   lat: number;
@@ -8,7 +13,6 @@ interface Props {
 }
 
 export default function EventMap({ lat, lng }: Props) {
-
   return (
     <div className='flex justify-center items-center text-lg w-full max-h-[250px] z-10'>
       <MapContainer
@@ -24,11 +28,7 @@ export default function EventMap({ lat, lng }: Props) {
         }}
       >
         <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-        <Marker
-          key={1}
-          position={[lat, lng]}
-          icon={locationIcon}
-        />
+        <Marker key={1} position={[lat, lng]} icon={locationIcon} />
       </MapContainer>
     </div>
   );
