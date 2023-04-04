@@ -1,13 +1,7 @@
 import { EventType } from './types';
 import { v4 as uuid } from 'uuid';
-// import { Icon } from 'leaflet';
 import { DateTime } from 'ts-luxon';
-let Leaflet;
-let Icon;
-if (typeof window !== 'undefined') {
-  Leaflet =  require('leaflet')
-  Icon = Leaflet.Icon;
-}
+
 
 export const user = {
   id: 'some-id',
@@ -96,11 +90,6 @@ export const categoryOptions = [
   { label: 'WORKSHOP', value: 'WORKSHOP' },
   { label: 'EDUCATION', value: 'EDUCATION' },
 ];
-
-export const locationIcon = new Icon({
-  iconUrl: 'https://www.svgrepo.com/show/449139/location-pin-filled.svg',
-  iconSize: [32, 32],
-});
 
 export const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple';

@@ -1,16 +1,16 @@
+import { Icon } from 'leaflet';
 import React from 'react';
-import { locationIcon } from '@/utils/constants';
-let Leaflet;
-if (typeof window !== 'undefined') {
-  Leaflet =  require('react-leaflet')
-}
-
-const { MapContainer, TileLayer, Marker } = Leaflet
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 interface Props {
   lat: number;
   lng: number;
 }
+
+const locationIcon = new Icon({
+  iconUrl: 'https://www.svgrepo.com/show/449139/location-pin-filled.svg',
+  iconSize: [32, 32],
+});
 
 export default function EventMap({ lat, lng }: Props) {
   return (

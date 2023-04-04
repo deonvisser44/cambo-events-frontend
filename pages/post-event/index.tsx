@@ -14,9 +14,12 @@ import LoginPrompt from '@/components/events/login-prompt';
 import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
 
-const PostEventMap = dynamic(() => import('../../components/events/post-event-map'), {
-  ssr: false,
-});
+const PostEventMap = dynamic(
+  () => import('../../components/events/post-event-map'),
+  {
+    ssr: false,
+  }
+);
 
 const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple';
@@ -80,9 +83,9 @@ export default function PostEvent() {
     };
     const { status } = await camboEventsApi.post('/event', postEventBody);
     if (status === 201) {
-      toast.success('Event posted')
+      toast.success('Event posted');
     } else {
-      toast.warn('Failed to post event')
+      toast.warn('Failed to post event');
     }
     router.replace('/my-events');
   };

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { LatLngExpression } from 'leaflet';
+import { Icon, LatLngExpression } from 'leaflet';
 import { FieldMetaProps, useField } from 'formik';
 import { MapClickEvent, UserStateType } from '@/utils/types';
-import { locationIcon } from '@/utils/constants';
 import { useSelector } from 'react-redux';
 import { selectUserState } from '@/store/user';
-let Leaflet;
-if (typeof window !== 'undefined') {
-  Leaflet =  require('react-leaflet')
-}
-
-const { MapContainer, TileLayer, Marker, useMapEvents } = Leaflet
+import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
 
 interface LocationMarkerProps {
   setValue: (value: any, shouldValidate?: boolean | undefined) => void;
   state: FieldMetaProps<any>;
 }
+
+const locationIcon = new Icon({
+  iconUrl: 'https://www.svgrepo.com/show/449139/location-pin-filled.svg',
+  iconSize: [32, 32],
+});
 
 function LocationMarkers({ setValue, state }: LocationMarkerProps) {
   const [marker, setMarker] = useState(state.initialValue);

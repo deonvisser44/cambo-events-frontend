@@ -1,5 +1,5 @@
 import { EventType, UserStateType } from '@/utils/types';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DateTime } from 'ts-luxon';
 import Close from '../icons/close';
 import Expand from '../icons/expand';
