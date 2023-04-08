@@ -12,6 +12,7 @@ import EditButton from './edit-button';
 import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
 import { isBrowser, isMobile } from 'react-device-detect';
+import ShareButton from './share-button';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -81,7 +82,13 @@ export default function EventCard({
               <EditButton event={event} />
             </div>
           ) : (
-            <Bookmark isSavedForUser={isEventSavedForUser} eventId={event.id} />
+            <div className='flex gap-2'>
+              <ShareButton eventId={event.id} />
+              <Bookmark
+                isSavedForUser={isEventSavedForUser}
+                eventId={event.id}
+              />
+            </div>
           )}
         </div>
 

@@ -2,15 +2,32 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import useFetch from '@/hooks/useFetch';
 import LoadingSpinner from '@/components/layout/loading-spinner';
+import { addAccessTokenToInterceptor } from '@/services/axios-config';
+import { setAuthToken, setHasAccessTokenBeenAddedToInterceptor, setIsAuthenticated, setUserId } from '@/store/user';
+import { UserAuthResponseUserDataType } from '@/utils/types';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 
 // https://developers.google.com/identity/gsi/web/reference/js-reference
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { handleGoogle, loading, error } = useFetch(
     `${process.env.NEXT_PUBLIC_API}/user/sign-up`
   );
 
   useEffect(() => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      const user: UserAuthResponseUserDataType = JSON.parse(userString);
+      addAccessTokenToInterceptor(user.token);
+      dispatch(setHasAccessTokenBeenAddedToInterceptor(true));
+      dispatch(setIsAuthenticated(true));
+      dispatch(setUserId(user.id));
+      dispatch(setAuthToken(user.token));
+      router.replace('/');
+    }
     /* global google */
     if ((global?.window as any).google) {
       (global?.window as any).google.accounts.id.initialize({
@@ -21,9 +38,7 @@ export default function SignUp() {
       (global?.window as any).google.accounts.id.renderButton(
         document.getElementById('signUpDiv'),
         {
-          // type: "standard",
           theme: 'filled_black',
-          // size: "small",
           text: 'continue_with',
           shape: 'pill',
         }
@@ -51,3 +66,4 @@ export default function SignUp() {
     </div>
   );
 }
+

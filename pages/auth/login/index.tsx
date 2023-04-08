@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Link from 'next/link';
 import useFetch from '@/hooks/useFetch';
 import { addAccessTokenToInterceptor } from '@/services/axios-config';
 import { useDispatch } from 'react-redux';

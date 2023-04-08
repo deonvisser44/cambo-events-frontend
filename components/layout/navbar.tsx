@@ -8,7 +8,7 @@ import { UserStateType } from '@/utils/types';
 import MobileLogoutButton from './mobile-logout-button';
 import DesktopLogoutButton from './desktop-logout-button';
 import { useRouter } from 'next/router';
-import neonLogo from '@/images/cambo-events-neon-logo.svg';
+import plainLogo from '@/images/cambo-events-plain-logo.svg';
 
 export default function NavBar() {
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function NavBar() {
                 <button onClick={handleNavigateToHome}>
                   <Image
                     className='h-8 w-fit'
-                    src={neonLogo}
+                    src={plainLogo}
                     alt='Cambo Events logo'
                     width={50}
                     height={50}
