@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import LoginPrompt from '@/components/events/login-prompt';
 import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
 const PostEventMap = dynamic(
   () => import('../../components/events/post-event-map'),
@@ -95,123 +96,145 @@ export default function PostEvent() {
   }
 
   return (
-    <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
-      <h3 className='text-3xl font-semibold text-center text-purple'>
-        Post Event
-      </h3>
-      <div>
-        <Formik
-          initialValues={initialFormValues}
-          validationSchema={EVENT_VALIDATION_SCHEMA}
-          onSubmit={(values) => {
-            handleSubmitEvent(values);
-          }}
-        >
-          {(formik) => (
-            <form
-              className='w-5/6 mx-auto flex flex-col gap-2 mb-6 mt-4'
-              onSubmit={formik.handleSubmit}
-            >
-              <label htmlFor='name' className={LABEL_STYLES}>
-                Name
-              </label>
-              <ErrorMessage
-                name='name'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field
-                name='name'
-                type='text'
-                className={INPUT_STYLES}
-                placeholder='Event name'
-              />
-
-              <label htmlFor='description' className={LABEL_STYLES}>
-                Description
-              </label>
-              <ErrorMessage
-                name='description'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field
-                name='description'
-                as='textarea'
-                className={INPUT_STYLES + ' min-h-[150px]'}
-                placeholder='Give details about the event and optionally paste a link to the Google Maps location'
-              />
-
-              <label htmlFor='startDate' className={LABEL_STYLES}>
-                Start Date
-              </label>
-              <ErrorMessage
-                name='startDate'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field name='startDate' type='date' className={INPUT_STYLES} />
-
-              <label htmlFor='startTime' className={LABEL_STYLES}>
-                Start Time
-              </label>
-              <ErrorMessage
-                name='startTime'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field name='startTime' type='time' className={INPUT_STYLES} />
-
-              <label htmlFor='endDate' className={LABEL_STYLES}>
-                End Date
-              </label>
-              <ErrorMessage
-                name='endDate'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field name='endDate' type='date' className={INPUT_STYLES} />
-
-              <label htmlFor='endTime' className={LABEL_STYLES}>
-                End Time
-              </label>
-              <ErrorMessage
-                name='endTime'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field name='endTime' type='time' className={INPUT_STYLES} />
-
-              <label htmlFor='categories' className={LABEL_STYLES}>
-                Categories
-              </label>
-              <ErrorMessage
-                name='categories'
-                component='p'
-                className={ERROR_STYLES}
-              />
-              <Field
-                component={CategorySelect}
-                name='categories'
-                options={categoryOptions}
-              />
-
-              <label htmlFor='coords' className={LABEL_STYLES}>
-                Location
-              </label>
-              <Field component={PostEventMap} name='coords' />
-
-              <button
-                type='submit'
-                disabled={!formik.isValid}
-                className='p-2 bg-purple hover:bg-violet-500 disabled:bg-violet-300 rounded-md text-xl text-white mt-2'
+    <>
+      <Head>
+        <title>
+          Post Event - Cambo Events
+        </title>
+        <meta
+          name='description'
+          content="Post an event you're hosting"
+        />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='icon' href='/favicon.ico' />
+        <meta
+          property='og:title'
+          content='Post Event - Cambo Events'
+        />
+        <meta
+          property='og:description'
+          content="Post an event you're hosting"
+        />
+        <meta property='og:image' content='/favicon.ico' />
+      </Head>
+      <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
+        <h3 className='text-3xl font-semibold text-center text-purple'>
+          Post Event
+        </h3>
+        <div>
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={EVENT_VALIDATION_SCHEMA}
+            onSubmit={(values) => {
+              handleSubmitEvent(values);
+            }}
+          >
+            {(formik) => (
+              <form
+                className='w-5/6 mx-auto flex flex-col gap-2 mb-6 mt-4'
+                onSubmit={formik.handleSubmit}
               >
-                Post Event
-              </button>
-            </form>
-          )}
-        </Formik>
+                <label htmlFor='name' className={LABEL_STYLES}>
+                  Name
+                </label>
+                <ErrorMessage
+                  name='name'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field
+                  name='name'
+                  type='text'
+                  className={INPUT_STYLES}
+                  placeholder='Event name'
+                />
+
+                <label htmlFor='description' className={LABEL_STYLES}>
+                  Description
+                </label>
+                <ErrorMessage
+                  name='description'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field
+                  name='description'
+                  as='textarea'
+                  className={INPUT_STYLES + ' min-h-[150px]'}
+                  placeholder='Give details about the event and optionally paste a link to the Google Maps location'
+                />
+
+                <label htmlFor='startDate' className={LABEL_STYLES}>
+                  Start Date
+                </label>
+                <ErrorMessage
+                  name='startDate'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field name='startDate' type='date' className={INPUT_STYLES} />
+
+                <label htmlFor='startTime' className={LABEL_STYLES}>
+                  Start Time
+                </label>
+                <ErrorMessage
+                  name='startTime'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field name='startTime' type='time' className={INPUT_STYLES} />
+
+                <label htmlFor='endDate' className={LABEL_STYLES}>
+                  End Date
+                </label>
+                <ErrorMessage
+                  name='endDate'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field name='endDate' type='date' className={INPUT_STYLES} />
+
+                <label htmlFor='endTime' className={LABEL_STYLES}>
+                  End Time
+                </label>
+                <ErrorMessage
+                  name='endTime'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field name='endTime' type='time' className={INPUT_STYLES} />
+
+                <label htmlFor='categories' className={LABEL_STYLES}>
+                  Categories
+                </label>
+                <ErrorMessage
+                  name='categories'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field
+                  component={CategorySelect}
+                  name='categories'
+                  options={categoryOptions}
+                />
+
+                <label htmlFor='coords' className={LABEL_STYLES}>
+                  Location
+                </label>
+                <Field component={PostEventMap} name='coords' />
+
+                <button
+                  type='submit'
+                  disabled={!formik.isValid}
+                  className='p-2 bg-purple hover:bg-violet-500 disabled:bg-violet-300 rounded-md text-xl text-white mt-2'
+                >
+                  Post Event
+                </button>
+              </form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

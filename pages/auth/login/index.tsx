@@ -11,6 +11,7 @@ import {
 import { UserAuthResponseUserDataType } from '@/utils/types';
 import { useRouter } from 'next/router';
 import LoadingSpinner from '@/components/layout/loading-spinner';
+import Head from 'next/head';
 
 // https://developers.google.com/identity/gsi/web/reference/js-reference
 
@@ -55,8 +56,25 @@ export default function Login() {
   }, [handleGoogle]);
 
   return (
-    <div className='min-h-screen flex items-center justify-center'>
-      {loading ? <LoadingSpinner /> : <div id='loginDiv'></div>}
-    </div>
+    <>
+      <Head>
+        <title>Login - Cambo Events</title>
+        <meta
+          name='description'
+          content='Find, share and post events happening in Cambodia'
+        />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='icon' href='/favicon.ico' />
+        <meta property='og:title' content='Login - Cambo Events' />
+        <meta
+          property='og:description'
+          content='Find, share and post events happening in Cambodia'
+        />
+        <meta property='og:image' content='/favicon.ico' />
+      </Head>
+      <div className='min-h-screen flex items-center justify-center'>
+        {loading ? <LoadingSpinner /> : <div id='loginDiv'></div>}
+      </div>
+    </>
   );
 }

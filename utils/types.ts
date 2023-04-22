@@ -73,3 +73,7 @@ export interface UserStateType {
   currentEvent: EventType;
   isAuthModalOpen: boolean;
 }
+
+export interface EventsByDate {
+  [date: string]: Event[];
+}

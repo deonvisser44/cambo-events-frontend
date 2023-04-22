@@ -58,7 +58,7 @@ export default function EventModal({
       className=' bg-gray-400 bg-opacity-75 z-50 fixed top-0 left-0 flex items-center w-full h-full'
       onClick={handleBackDropClick}
     >
-      <div className='h-fit w-1/3 mx-auto my-auto rounded-lg bg-gradient-to-r from-violet-600 via-violet-700 to-violet-800 p-1'>
+      <div className='h-fit w-1/3 mx-auto my-auto rounded-lg bg-gradient-to-r from-indigo-500 via-violet-500 to-orange-400 p-1'>
         <div
           onClick={handleModalDivClick}
           className='  flex flex-col mx-auto my-auto rounded-lg bg-slate-400'

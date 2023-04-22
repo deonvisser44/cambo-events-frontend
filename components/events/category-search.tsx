@@ -1,27 +1,20 @@
-import camboEventsApi from '@/services/axios-config';
 import { categoryOptions } from '@/utils/constants';
-import { EventType } from '@/utils/types';
-import React, { useState } from 'react';
+import React from 'react';
 import Select, { SingleValue } from 'react-select';
 
 interface Props {
-  setHasSearchedForEvents: (value: boolean) => void;
-  setSearchResults: (value: EventType[]) => void;
+  searchedCategory: SingleValue<{ label: string; value: string }>;
+  setSearchedCategory: (
+    newValue: SingleValue<{ label: string; value: string }>
+  ) => void;
 }
 
 const SELECT_OPTIONS = [{ value: 'ALL', label: 'ALL' }, ...categoryOptions];
 
 export default function CategorySearch({
-  setHasSearchedForEvents,
-  setSearchResults,
+  setSearchedCategory,
+  searchedCategory,
 }: Props) {
-  const [searchedCategory, setSearchedCategory] = useState<
-    SingleValue<{
-      label: string;
-      value: string;
-    }>
-  >(SELECT_OPTIONS[0]);
-
   const handleCategoryChange = async (
     newValue: SingleValue<{
       label: string;
@@ -29,15 +22,6 @@ export default function CategorySearch({
     }>
   ) => {
     setSearchedCategory(newValue);
-    if (newValue?.value === 'ALL') {
-      setHasSearchedForEvents(false);
-      return;
-    }
-    const response = await camboEventsApi.get('/event', {
-      params: { category: newValue?.value },
-    });
-    setSearchResults(response.data);
-    setHasSearchedForEvents(true);
   };
 
   return (
