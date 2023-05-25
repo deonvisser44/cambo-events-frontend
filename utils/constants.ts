@@ -18,6 +18,7 @@ export const TEST_EVENTS: EventType[] = [
     location: { lat: '11.562108', lng: '104.888535' },
     image: { path: '', url: '' },
     category: ['art', 'music', 'dance'],
+    area: 'KAMPOT',
   },
   {
     id: uuid(),
@@ -29,6 +30,7 @@ export const TEST_EVENTS: EventType[] = [
     location: { lat: '11.562108', lng: '104.888535' },
     image: { path: '', url: '' },
     category: ['art', 'music', 'dance'],
+    area: 'PHNOM PENH',
   },
   {
     id: uuid(),
@@ -40,6 +42,7 @@ export const TEST_EVENTS: EventType[] = [
     location: { lat: '11.562108', lng: '104.888535' },
     image: { path: '', url: '' },
     category: ['art', 'music', 'dance'],
+    area: 'KAMPOT',
   },
   {
     id: uuid(),
@@ -51,6 +54,7 @@ export const TEST_EVENTS: EventType[] = [
     location: { lat: '11.562108', lng: '104.888535' },
     image: { path: '', url: '' },
     category: ['art', 'music', 'dance'],
+    area: 'SIEM REAP',
   },
 ];
 
@@ -91,6 +95,17 @@ export const categoryOptions = [
   { label: 'EDUCATION', value: 'EDUCATION' },
 ];
 
+export const cityOptions = [
+  { label: 'PHNOM PENH', value: 'PHNOM PENH' },
+  { label: 'SIEM REAP', value: 'SIEM REAP' },
+  { label: 'KAMPOT', value: 'KAMPOT' },
+  { label: 'SIHANOUKVILLE', value: 'SIHANOUKVILLE' },
+  { label: 'KEP', value: 'KEP' },
+  { label: 'BATTAMBANG', value: 'BATTAMBANG' },
+  { label: 'KOH RONG', value: 'KOH RONG' },
+  { label: 'KOH RONG SAMLOEM', value: 'KOH RONG SAMLOEM' },
+];
+
 export const INPUT_STYLES =
   'p-1 rounded-md border border-gray-400 text-lg outline-purple';
 export const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
@@ -106,4 +121,5 @@ export const DEFAULT_CURRENT_EVENT_STATE = {
   location: { lat: 11.554032, lng: 104.924882 },
   image: { url: '', path: '' },
   category: [],
+  area: '',
 };

@@ -4,7 +4,7 @@ import { DateTime } from 'ts-luxon';
 import CategorySelect from '@/components/events/category-select';
 import { useSelector } from 'react-redux';
 import { selectUserState } from '@/store/user';
-import { categoryOptions } from '@/utils/constants';
+import { categoryOptions, cityOptions } from '@/utils/constants';
 import { calculateStartAndEndTimes } from '@/utils/helpers';
 import { submitEventType, UserStateType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
@@ -14,6 +14,7 @@ import LoginPrompt from '@/components/events/login-prompt';
 import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import CitySelect from '@/components/events/city-select';
 
 const PostEventMap = dynamic(
   () => import('../../components/events/post-event-map'),
@@ -53,6 +54,7 @@ export default function PostEvent() {
     endDate: end,
     endTime: endMilitaryTime,
     categories: selectedCategories,
+    area: { label: currentEvent?.area.toUpperCase(), value: currentEvent?.area.toUpperCase() },
     coords: currentEvent?.location,
   };
 
@@ -66,6 +68,7 @@ export default function PostEvent() {
       description,
       categories,
       coords,
+      area,
     } = eventArgs;
     const categoriesToUse = categories?.map((categoryObj) => categoryObj.value);
     const { start, end } = calculateStartAndEndTimes({
@@ -81,6 +84,7 @@ export default function PostEvent() {
       location: { lat: coords.lat.toString(), lng: coords.lng.toString() },
       start_date: start,
       end_date: end,
+      area: area.value,
     };
     const { status } = await camboEventsApi.post('/event', postEventBody);
     if (status === 201) {
@@ -98,19 +102,11 @@ export default function PostEvent() {
   return (
     <>
       <Head>
-        <title>
-          Post Event - Cambo Events
-        </title>
-        <meta
-          name='description'
-          content="Post an event you're hosting"
-        />
+        <title>Post Event - Cambo Events</title>
+        <meta name='description' content="Post an event you're hosting" />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
-        <meta
-          property='og:title'
-          content='Post Event - Cambo Events'
-        />
+        <meta property='og:title' content='Post Event - Cambo Events' />
         <meta
           property='og:description'
           content="Post an event you're hosting"
@@ -216,6 +212,20 @@ export default function PostEvent() {
                   component={CategorySelect}
                   name='categories'
                   options={categoryOptions}
+                />
+
+                <label htmlFor='area' className={LABEL_STYLES}>
+                  City
+                </label>
+                <ErrorMessage
+                  name='area'
+                  component='p'
+                  className={ERROR_STYLES}
+                />
+                <Field
+                  component={CitySelect}
+                  name='area'
+                  options={cityOptions}
                 />
 
                 <label htmlFor='coords' className={LABEL_STYLES}>

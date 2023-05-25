@@ -24,6 +24,7 @@ export interface EventType {
   location: LocationType;
   image: ImageDataType;
   category: string[];
+  area: string;
 }
 
 export interface SavedEventType {
@@ -56,6 +57,7 @@ export interface submitEventType {
   endTime?: string | null;
   categories?: { label:string, value: string }[];
   coords: LocationType;
+  area: { label:string, value: string };
 }
 
 export interface UserAuthResponseUserDataType {

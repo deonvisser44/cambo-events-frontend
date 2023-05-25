@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUserState, setCurrentEvent } from '@/store/user';
 import {
   categoryOptions,
+  cityOptions,
   DEFAULT_CURRENT_EVENT_STATE,
 } from '@/utils/constants';
 import { calculateStartAndEndTimes } from '@/utils/helpers';
@@ -16,6 +17,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import CitySelect from '@/components/events/city-select';
 
 const PostEventMap = dynamic(
   () => import('../../components/events/post-event-map'),
@@ -62,6 +64,7 @@ export default function EditEventPage() {
     endDate: end,
     endTime: endMilitaryTime,
     categories: selectedCategories,
+    area: { label: currentEvent?.area.toUpperCase(), value: currentEvent?.area.toUpperCase() },
     coords: currentEvent?.location,
   };
 
@@ -75,6 +78,7 @@ export default function EditEventPage() {
       description,
       categories,
       coords,
+      area,
     } = eventArgs;
     const categoriesToUse = categories?.map((categoryObj) => categoryObj.value);
     const { start, end } = calculateStartAndEndTimes({
@@ -91,6 +95,7 @@ export default function EditEventPage() {
       location: { lat: coords.lat.toString(), lng: coords.lng.toString() },
       start_date: start,
       end_date: end,
+      area: area.value,
     };
     const { status } = await camboEventsApi.put('/event', postEventBody);
     if (status === 200) {
@@ -231,6 +236,20 @@ export default function EditEventPage() {
                     component={CategorySelect}
                     name='categories'
                     options={categoryOptions}
+                  />
+
+                  <label htmlFor='area' className={LABEL_STYLES}>
+                    City
+                  </label>
+                  <ErrorMessage
+                    name='area'
+                    component='p'
+                    className={ERROR_STYLES}
+                  />
+                  <Field
+                    component={CitySelect}
+                    name='area'
+                    options={cityOptions}
                   />
 
                   <label htmlFor='coords' className={LABEL_STYLES}>

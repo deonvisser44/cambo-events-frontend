@@ -22,6 +22,7 @@ import { DateTime } from 'ts-luxon';
 import { SingleValue } from 'react-select';
 import { categoryOptions } from '@/utils/constants';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import AreaSearch from '@/components/events/area-search';
 
 const CategorySearch = dynamic(
   () => import('@/components/events/category-search'),
@@ -48,6 +49,12 @@ export default function Home({ events }: Props) {
       value: string;
     }>
   >(SELECT_OPTIONS[0]);
+  const [searchedArea, setSearchedArea] = useState<
+    SingleValue<{
+      label: string;
+      value: string;
+    }>
+  >(SELECT_OPTIONS[0]);
   const eventsGroupedByDate = groupByDay(eventsToUse);
   const lastItemRef = useRef();
 
@@ -61,16 +68,20 @@ export default function Home({ events }: Props) {
 
   const getEventsAfterSearchChange = async () => {
     const { data } = await camboEventsApi.get(`/event`, {
-      params: { category: searchedCategory?.value, page: 1 },
+      params: {
+        ...(searchedCategory?.value !== 'ALL' && {
+          category: searchedCategory?.value,
+        }),
+        page: 1,
+        ...(searchedArea?.value !== 'ALL' && { area: searchedArea?.value }),
+      },
     });
     setEventsToUse([...data]);
   };
 
   useEffect(() => {
-    if (searchedCategory?.value !== 'ALL') {
-      getEventsAfterSearchChange();
-    }
-  }, [searchedCategory]);
+    getEventsAfterSearchChange();
+  }, [searchedCategory, searchedArea]);
 
   const handleCheckAuthStatus = () => {
     const user = localStorage.getItem('user');
@@ -118,6 +129,11 @@ export default function Home({ events }: Props) {
           setSearchedCategory={setSearchedCategory}
           searchedCategory={searchedCategory}
         />
+        <AreaSearch
+          setSearchedArea={setSearchedArea}
+          searchedArea={searchedArea}
+        />
+
         <InfiniteScroll
           dataLength={eventsToUse.length}
           next={getEvents}
