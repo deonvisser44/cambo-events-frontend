@@ -4,8 +4,8 @@ import { EventType, EventsByDate, SavedEventType, calculateEndTypesParams } from
 export const calculateStartAndEndTimes = ({
   startDate,
   startTime,
-  endDate,
-  endTime,
+  // endDate,
+  // endTime,
 }: calculateEndTypesParams) => {
   const startTimeAsDate = new Date(startDate!);
   const [startHours, startMinutes] = startTime.split(':');
@@ -14,13 +14,13 @@ export const calculateStartAndEndTimes = ({
   const start = startTimeAsDate.toISOString();
   let endTimeAsDate;
   let end = null;
-  if (endDate && endTime) {
-    endTimeAsDate = new Date(endDate);
-    const [endHours, endMinutes] = endTime.split(':');
-    endTimeAsDate.setHours(Number(endHours));
-    endTimeAsDate.setMinutes(Number(endMinutes));
-    end = endTimeAsDate.toISOString();
-  }
+  // if (endDate && endTime) {
+  //   endTimeAsDate = new Date(endDate);
+  //   const [endHours, endMinutes] = endTime.split(':');
+  //   endTimeAsDate.setHours(Number(endHours));
+  //   endTimeAsDate.setMinutes(Number(endMinutes));
+  //   end = endTimeAsDate.toISOString();
+  // }
   return { start, end };
 };
 

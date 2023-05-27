@@ -10,7 +10,7 @@ export default function CitySelect(props: any) {
 
   return (
     <Select
-      className='z-50'
+      className='z-40'
       {...props}
       value={state?.value}
       isMulti={false}

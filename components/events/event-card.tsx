@@ -68,14 +68,16 @@ export default function EventCard({
 
   return (
     <div
-      className={`w-[90%] md:w-full flex flex-col rounded-lg bg-slate-400 ${
+      className={`w-[90%] md:w-full flex flex-col rounded-lg bg-slate-400  ${
         isBrowser &&
         'hover:bg-violet-300 hover:shadow-xl cursor-pointer transition duration-300'
       }`}
     >
       <div onClick={toggleShowMore} className='px-2 py-2 gap-1 flex flex-col'>
         <div className='flex justify-between'>
-          <h1 className='text-lg font-semibold'>{name}</h1>
+          <h1 className='text-lg font-semibold whitespace-nowrap overflow-hidden text-ellipsis'>
+            {name}
+          </h1>
           {isOnMyEventsPage ? (
             <div className='flex gap-2'>
               <DeleteIcon onClick={handleDeleteIconClick} />
@@ -113,14 +115,12 @@ export default function EventCard({
         </button>
       )}
       {isShowMoreOpen && (
-        <div className='flex flex-col w-full px-2 gap-2 py-2'>
+        <div className='flex flex-col w-full px-2 gap-2 py-1'>
+          {/* <p>{startDateToUSe}</p> */}
           <p className='text-sm'>{description}</p>
-          <p>
-            <span className='font-semibold'>From:</span> {startDateToUSe}
-          </p>
-          <p>
+          {/* <p>
             <span className='font-semibold'>To:</span> {EndDateToUSe}
-          </p>
+          </p> */}
           <EventMap lat={Number(location.lat)} lng={Number(location.lng)} />
         </div>
       )}

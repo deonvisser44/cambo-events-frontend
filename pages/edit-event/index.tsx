@@ -39,16 +39,16 @@ export default function EditEventPage() {
   const start = DateTime.fromJSDate(
     new Date(currentEvent.start_date)
   ).toISODate();
-  const end = DateTime.fromJSDate(new Date(currentEvent.end_date)).toISODate();
+  // const end = DateTime.fromJSDate(new Date(currentEvent.end_date)).toISODate();
   const selectedCategories = currentEvent.category.map((category) => {
     return { label: category.toUpperCase(), value: category };
   });
   const startMilitaryTime = DateTime.fromJSDate(
     new Date(currentEvent.start_date)
   ).toFormat('hh:mm');
-  const endMilitaryTime = DateTime.fromJSDate(
-    new Date(currentEvent.end_date)
-  ).toFormat('hh:mm');
+  // const endMilitaryTime = DateTime.fromJSDate(
+  //   new Date(currentEvent.end_date)
+  // ).toFormat('hh:mm');
 
   useEffect(() => {
     return () => {
@@ -61,10 +61,10 @@ export default function EditEventPage() {
     description: currentEvent?.description,
     startDate: start,
     startTime: startMilitaryTime,
-    endDate: end,
-    endTime: endMilitaryTime,
+    // endDate: end,
+    // endTime: endMilitaryTime,
     categories: selectedCategories,
-    area: { label: currentEvent?.area.toUpperCase(), value: currentEvent?.area.toUpperCase() },
+    area: { label: currentEvent?.area?.toUpperCase(), value: currentEvent?.area?.toUpperCase() },
     coords: currentEvent?.location,
   };
 
@@ -72,8 +72,8 @@ export default function EditEventPage() {
     const {
       startDate,
       startTime,
-      endDate,
-      endTime,
+      // endDate,
+      // endTime,
       name,
       description,
       categories,
@@ -84,8 +84,8 @@ export default function EditEventPage() {
     const { start, end } = calculateStartAndEndTimes({
       startDate: startDate,
       startTime: startTime,
-      endDate: endDate,
-      endTime: endTime,
+      // endDate: endDate,
+      // endTime: endTime,
     });
     const postEventBody = {
       id: currentEvent.id,
@@ -94,7 +94,7 @@ export default function EditEventPage() {
       category: categoriesToUse,
       location: { lat: coords.lat.toString(), lng: coords.lng.toString() },
       start_date: start,
-      end_date: end,
+      end_date: start,
       area: area.value,
     };
     const { status } = await camboEventsApi.put('/event', postEventBody);
@@ -177,7 +177,7 @@ export default function EditEventPage() {
                   />
 
                   <label htmlFor='startDate' className={LABEL_STYLES}>
-                    Start Date
+                    Date
                   </label>
                   <ErrorMessage
                     name='startDate'
@@ -191,7 +191,7 @@ export default function EditEventPage() {
                   />
 
                   <label htmlFor='startTime' className={LABEL_STYLES}>
-                    Start Time
+                    Time
                   </label>
                   <ErrorMessage
                     name='startTime'
@@ -204,7 +204,7 @@ export default function EditEventPage() {
                     className={INPUT_STYLES}
                   />
 
-                  <label htmlFor='endDate' className={LABEL_STYLES}>
+                  {/* <label htmlFor='endDate' className={LABEL_STYLES}>
                     End Date
                   </label>
                   <ErrorMessage
@@ -222,7 +222,7 @@ export default function EditEventPage() {
                     component='p'
                     className={ERROR_STYLES}
                   />
-                  <Field name='endTime' type='time' className={INPUT_STYLES} />
+                  <Field name='endTime' type='time' className={INPUT_STYLES} /> */}
 
                   <label htmlFor='categories' className={LABEL_STYLES}>
                     Categories

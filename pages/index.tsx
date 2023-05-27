@@ -22,10 +22,16 @@ import { DateTime } from 'ts-luxon';
 import { SingleValue } from 'react-select';
 import { categoryOptions } from '@/utils/constants';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import AreaSearch from '@/components/events/area-search';
 
 const CategorySearch = dynamic(
   () => import('@/components/events/category-search'),
+  {
+    ssr: false,
+  }
+);
+
+const AreaSearch = dynamic(
+  () => import('@/components/events/area-search'),
   {
     ssr: false,
   }

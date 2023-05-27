@@ -71,16 +71,14 @@ export default function SharedEvent() {
               </div>
             </div>
 
-            <div className='flex flex-col w-full px-2 gap-2 py-2'>
+            <div className='flex flex-col w-full px-2 gap-2 py-1'>
+              <p>{startDateToUSe}</p>
               <p className='text-sm bg-slate-300 px-2 rounded-md'>
                 {description}
               </p>
-              <p>
-                <span className='font-semibold'>From:</span> {startDateToUSe}
-              </p>
-              <p>
+              {/* <p>
                 <span className='font-semibold'>To:</span> {EndDateToUSe}
-              </p>
+              </p> */}
               <EventMap lat={Number(location.lat)} lng={Number(location.lng)} />
             </div>
           </div>

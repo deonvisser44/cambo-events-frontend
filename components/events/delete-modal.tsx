@@ -1,5 +1,6 @@
 import camboEventsApi from '@/services/axios-config';
-import { selectUserState } from '@/store/user';
+import { selectUserState, setCurrentEvent } from '@/store/user';
+import { DEFAULT_CURRENT_EVENT_STATE } from '@/utils/constants';
 import { UserStateType } from '@/utils/types';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -9,7 +10,10 @@ interface Props {
   handleUpdateListAfterDelete: () => void;
 }
 
-export default function DeleteModal({ setIsDeleteModalOpen, handleUpdateListAfterDelete }: Props) {
+export default function DeleteModal({
+  setIsDeleteModalOpen,
+  handleUpdateListAfterDelete,
+}: Props) {
   const userState: UserStateType = useSelector(selectUserState);
   const { currentEvent } = userState;
 
@@ -23,6 +27,7 @@ export default function DeleteModal({ setIsDeleteModalOpen, handleUpdateListAfte
     });
     setIsDeleteModalOpen(false);
     handleUpdateListAfterDelete();
+    setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE);
   };
 
   return (
@@ -31,7 +36,7 @@ export default function DeleteModal({ setIsDeleteModalOpen, handleUpdateListAfte
       onClick={() => setIsDeleteModalOpen(false)}
     >
       <div
-        className='bg-slate-600 rounded-md gap-5 flex flex-col justify-around p-4 mx-auto my-auto w-4/5 md:w-1/5 min-h-[350px] md:min-h-[300px]'
+        className='bg-slate-600 rounded-md gap-5 flex flex-col justify-between p-4 mx-auto my-auto w-4/5 md:w-1/5 h-fit min-h-[250px] md:min-h-[200px]'
         onClick={handleModalDivClick}
       >
         <p className='text-xl font-semibold text-center text-white'>
