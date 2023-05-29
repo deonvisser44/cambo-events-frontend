@@ -21,6 +21,7 @@ const initialState: UserStateType = {
     location: { lat: 11.554032, lng: 104.924882 },
     image: { url: '', path: '' },
     category: [],
+    area: 'PHNOM PENH',
   },
 };
 
