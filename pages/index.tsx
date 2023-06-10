@@ -22,6 +22,7 @@ import { DateTime } from 'ts-luxon';
 import { SingleValue } from 'react-select';
 import { categoryOptions } from '@/utils/constants';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import LoadingSpinner from '@/components/layout/loading-spinner';
 
 const CategorySearch = dynamic(
   () => import('@/components/events/category-search'),
@@ -30,12 +31,9 @@ const CategorySearch = dynamic(
   }
 );
 
-const AreaSearch = dynamic(
-  () => import('@/components/events/area-search'),
-  {
-    ssr: false,
-  }
-);
+const AreaSearch = dynamic(() => import('@/components/events/area-search'), {
+  ssr: false,
+});
 
 interface Props {
   events: EventType[];
@@ -49,6 +47,7 @@ export default function Home({ events }: Props) {
   const { isAuthModalOpen } = userState;
   const [eventsToUse, setEventsToUse] = useState(events);
   const [currentPage, setCurrentPage] = useState(2);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchedCategory, setSearchedCategory] = useState<
     SingleValue<{
       label: string;
@@ -65,14 +64,17 @@ export default function Home({ events }: Props) {
   const lastItemRef = useRef();
 
   const getEvents = async () => {
+    setIsLoading(true);
     const { data } = await camboEventsApi.get(`/event`, {
       params: { category: searchedCategory?.value, page: currentPage },
     });
     setEventsToUse((prevEvents) => [...prevEvents, ...data]);
     setCurrentPage((currentValue) => currentValue + 1);
+    setIsLoading(false);
   };
 
   const getEventsAfterSearchChange = async () => {
+    setIsLoading(true);
     const { data } = await camboEventsApi.get(`/event`, {
       params: {
         ...(searchedCategory?.value !== 'ALL' && {
@@ -83,6 +85,7 @@ export default function Home({ events }: Props) {
       },
     });
     setEventsToUse([...data]);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -140,41 +143,47 @@ export default function Home({ events }: Props) {
           searchedArea={searchedArea}
         />
 
-        <InfiniteScroll
-          dataLength={eventsToUse.length}
-          next={getEvents}
-          hasMore={true}
-          loader={<h3></h3>}
-        >
-          <div className='min-h-screen md:min-h-fit flex flex-col items-center md:items-start md:w-3/5 md:mt-10 my-10 md:mx-auto md:my-auto'>
-            {eventsGroupedByDate.map((eventsArray, arrayIndex) => {
-              const date = DateTime.fromISO(
-                eventsArray[0]?.start_date as string
-              );
-              const formattedDate = date.toFormat('d LLL, yyyy');
-              return (
-                <div
-                  key={arrayIndex}
-                  className='w-full flex flex-col items-center'
-                >
-                  <p className='text-xl text-white'>{formattedDate}</p>
-                  <hr className='w-1/5 md:w-3/5 my-2 h-[4px] rounded-lg border-none bg-gradient-to-r from-indigo-500 via-violet-500 to-orange-500' />
-                  <div className='md:min-h-fit flex flex-col md:grid md:grid-cols-3 items-center md:items-start w-full md:w-full mt-1 md:mt-2 pb-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
-                    {eventsArray.map((event, index) => {
-                      const isLastDateGroup =
-                        arrayIndex === eventsGroupedByDate.length - 1;
-                      const isLastEventForDate =
-                        index === eventsArray.length - 1;
-                      const isLast = isLastDateGroup && isLastEventForDate;
-                      const eventRef = isLast ? lastItemRef : null;
-                      return <EventCard key={index} event={event} />;
-                    })}
-                  </div>
-                </div>
-              );
-            })}
+        {isLoading ? (
+          <div className='mx-auto mt-20 flex items-center justify-center'>
+            <LoadingSpinner />
           </div>
-        </InfiniteScroll>
+        ) : (
+          <InfiniteScroll
+            dataLength={eventsToUse.length}
+            next={getEvents}
+            hasMore={true}
+            loader={<p></p>}
+          >
+            <div className='min-h-screen md:min-h-fit flex flex-col items-center md:items-start md:w-3/5 md:mt-10 my-10 md:mx-auto md:my-auto'>
+              {eventsGroupedByDate.map((eventsArray, arrayIndex) => {
+                const date = DateTime.fromISO(
+                  eventsArray[0]?.start_date as string
+                );
+                const formattedDate = date.toFormat('d LLL, yyyy');
+                return (
+                  <div
+                    key={arrayIndex}
+                    className='w-full flex flex-col items-center'
+                  >
+                    <p className='text-xl text-white'>{formattedDate}</p>
+                    <hr className='w-1/5 md:w-3/5 my-2 h-[4px] rounded-lg border-none bg-gradient-to-r from-indigo-500 via-violet-500 to-orange-500' />
+                    <div className='md:min-h-fit flex flex-col md:grid md:grid-cols-3 items-center md:items-start w-full md:w-full mt-1 md:mt-2 pb-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
+                      {eventsArray.map((event, index) => {
+                        const isLastDateGroup =
+                          arrayIndex === eventsGroupedByDate.length - 1;
+                        const isLastEventForDate =
+                          index === eventsArray.length - 1;
+                        const isLast = isLastDateGroup && isLastEventForDate;
+                        const eventRef = isLast ? lastItemRef : null;
+                        return <EventCard key={index} event={event} />;
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </InfiniteScroll>
+        )}
         {isAuthModalOpen && <AuthModal />}
       </main>
     </>

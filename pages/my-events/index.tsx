@@ -1,5 +1,6 @@
 import EventCard from '@/components/events/event-card';
 import LoginPrompt from '@/components/events/login-prompt';
+import LoadingSpinner from '@/components/layout/loading-spinner';
 import camboEventsApi from '@/services/axios-config';
 import { selectUserState } from '@/store/user';
 import { groupByDay } from '@/utils/helpers';
@@ -14,13 +15,16 @@ export default function MyEvents() {
   const userState: UserStateType = useSelector(selectUserState);
   const { isUserAuthenticated, user_id, currentEvent } = userState;
   const [userEvents, setUserEvents] = useState<EventType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const eventsGroupedByDate = groupByDay(userEvents);
 
   const fetchUserCreatedEvents = async () => {
+    setIsLoading(true);
     const response = await camboEventsApi.get('/event', {
       params: { host_id: user_id },
     });
     setUserEvents(response.data);
+    setIsLoading(false);
   };
 
   const handleUpdateListAfterDelete = () => {
@@ -58,19 +62,14 @@ export default function MyEvents() {
   return (
     <>
       <Head>
-        <title>
-          My Events - Cambo Events
-        </title>
+        <title>My Events - Cambo Events</title>
         <meta
           name='description'
           content='Find, share and post events happening in Cambodia'
         />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
-        <meta
-          property='og:title'
-          content='My Events - Cambo Events'
-        />
+        <meta property='og:title' content='My Events - Cambo Events' />
         <meta
           property='og:description'
           content='Find, share and post events happening in Cambodia'
@@ -78,30 +77,40 @@ export default function MyEvents() {
         <meta property='og:image' content='/favicon.ico' />
       </Head>
       <main className='min-h-screen min-w-screen'>
-        <div className='min-h-screen md:min-h-fit flex flex-col items-center md:items-start md:w-3/5 md:mt-10 my-10 md:mx-auto md:my-auto'>
-          {eventsGroupedByDate.map((eventsArray, arrayIndex) => {
-            const date = DateTime.fromISO(eventsArray[0]?.start_date as string);
-            const formattedDate = date.toFormat('d LLL, yyyy');
-            return (
-              <div
-                key={arrayIndex}
-                className='w-full flex flex-col items-center'
-              >
-                <p className='text-xl text-white'>{formattedDate}</p>
-                <hr className='w-1/5 md:w-3/5 my-2 h-[4px] rounded-lg border-none bg-gradient-to-r from-indigo-500 via-violet-500 to-orange-500' />
-                <div className='md:min-h-fit flex flex-col md:grid md:grid-cols-3 items-center md:items-start w-full md:w-full mt-1 md:mt-2 pb-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
-                  {eventsArray.map((event, index) => (
-                    <EventCard
-                      key={index}
-                      event={event}
-                      handleUpdateListAfterDelete={handleUpdateListAfterDelete}
-                    />
-                  ))}
+        {isLoading ? (
+          <div className='mx-auto mt-20 flex items-center justify-center'>
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className='min-h-screen md:min-h-fit flex flex-col items-center md:items-start md:w-3/5 md:mt-10 my-10 md:mx-auto md:my-auto'>
+            {eventsGroupedByDate.map((eventsArray, arrayIndex) => {
+              const date = DateTime.fromISO(
+                eventsArray[0]?.start_date as string
+              );
+              const formattedDate = date.toFormat('d LLL, yyyy');
+              return (
+                <div
+                  key={arrayIndex}
+                  className='w-full flex flex-col items-center'
+                >
+                  <p className='text-xl text-white'>{formattedDate}</p>
+                  <hr className='w-1/5 md:w-3/5 my-2 h-[4px] rounded-lg border-none bg-gradient-to-r from-indigo-500 via-violet-500 to-orange-500' />
+                  <div className='md:min-h-fit flex flex-col md:grid md:grid-cols-3 items-center md:items-start w-full md:w-full mt-1 md:mt-2 pb-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
+                    {eventsArray.map((event, index) => (
+                      <EventCard
+                        key={index}
+                        event={event}
+                        handleUpdateListAfterDelete={
+                          handleUpdateListAfterDelete
+                        }
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </main>
     </>
   );
