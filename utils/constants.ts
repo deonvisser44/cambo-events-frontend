@@ -84,16 +84,30 @@ export const categoryOptions = [
   { label: 'QUIZ', value: 'QUIZ' },
   { label: 'PARTY', value: 'PARTY' },
   { label: 'FOOD', value: 'FOOD' },
-  { label: 'DRINK', value: 'DRINK' },
   { label: 'SPORTS', value: 'SPORTS' },
   { label: 'CONCERT', value: 'CONCERT' },
   { label: 'FESTIVAL', value: 'FESTIVAL' },
-  { label: 'CONFERENCE', value: 'CONFERENCE' },
   { label: 'NETWORKING', value: 'NETWORKING' },
   { label: 'CULTURAL', value: 'CULTURAL' },
   { label: 'WORKSHOP', value: 'WORKSHOP' },
   { label: 'EDUCATION', value: 'EDUCATION' },
 ];
+
+export const categoryColors: { [key: string]: string } = {
+  art: '#ae35cc',
+  music: '#3579cc',
+  dance: '#35ccae',
+  quiz: '#c735cc',
+  party: '#cc7e35',
+  food: '#cc3560',
+  sports: '#cc3f35',
+  concert: '#4992e6',
+  festival: '#ded33c',
+  networking: '#3cde64',
+  cultural: '#3cdeab',
+  workshop: '#92de3c',
+  education: '#3c4fde',
+};
 
 export const cityOptions = [
   { label: 'PHNOM PENH', value: 'PHNOM PENH' },

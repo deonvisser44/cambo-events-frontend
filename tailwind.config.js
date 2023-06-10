@@ -10,7 +10,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        purple: '#7336ED',
+        purple: '#8D3FD0',
+        darkBlue: '#223CCF',
+        lightBlue: '#0683D7',
+        lightRed: '#ED3D63',
       },
       fontFamily: {
         mono: ['var(--font-montserrat)', ...fontFamily.mono],

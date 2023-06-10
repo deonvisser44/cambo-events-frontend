@@ -120,7 +120,7 @@ export default function PostEvent() {
         <meta property='og:image' content='/favicon.ico' />
       </Head>
       <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
-        <h3 className='text-3xl font-semibold text-center text-purple'>
+        <h3 className='text-3xl text-center text-purple'>
           Post Event
         </h3>
         <div>

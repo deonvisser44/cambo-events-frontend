@@ -72,7 +72,7 @@ export default function Layout({ children }: Props) {
   }, []);
 
   return (
-    <div className={`w-full h-full min-h-screen bg-gradient-to-tl from-purple via-slate-700 to-slate-900 ${montserrat.variable} font-mono`}>
+    <div className={`w-full h-full min-h-screen bg-gradient-to-tl from-darkBlue via-slate-700 to-slate-900 ${montserrat.variable} font-mono`}>
       <Script src='https://accounts.google.com/gsi/client' async defer />
       <Navbar />
       {children}

@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import EditButton from './edit-button';
 import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
+import { categoryColors } from '@/utils/constants';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -83,6 +84,9 @@ export default function EventModal({
               {category.map((item, index) => (
                 <p
                   key={index}
+                  style={{
+                    backgroundColor: categoryColors[item.toLocaleLowerCase()],
+                  }}
                   className='rounded-lg bg-slate-700 px-2 py-1 text-white text-xs'
                 >
                   {item.toUpperCase()}

@@ -5,6 +5,7 @@ import camboEventsApi from '@/services/axios-config';
 import dynamic from 'next/dynamic';
 import { DateTime } from 'ts-luxon';
 import Head from 'next/head';
+import { categoryColors } from '@/utils/constants';
 
 const EventMap = dynamic(() => import('@/components/events/event-map'), {
   ssr: false,
@@ -63,6 +64,9 @@ export default function SharedEvent() {
                 {category.map((item, index) => (
                   <p
                     key={index}
+                    style={{
+                      backgroundColor: categoryColors[item.toLocaleLowerCase()],
+                    }}
                     className='rounded-lg bg-slate-700 px-2 py-1 text-white text-xs'
                   >
                     {item.toUpperCase()}

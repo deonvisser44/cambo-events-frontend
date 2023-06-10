@@ -13,6 +13,7 @@ import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
 import { isBrowser, isMobile } from 'react-device-detect';
 import ShareButton from './share-button';
+import { categoryColors } from '@/utils/constants';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -99,7 +100,10 @@ export default function EventCard({
           {category.map((item, index) => (
             <p
               key={index}
-              className='rounded-lg bg-slate-700 px-2 py-1 text-white text-xs'
+              style={{
+                backgroundColor: categoryColors[item.toLocaleLowerCase()],
+              }}
+              className='rounded-lg px-2 py-1 text-white text-xs'
             >
               {item.toUpperCase()}
             </p>
