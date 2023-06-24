@@ -24,7 +24,7 @@ const PostEventMap = dynamic(
 );
 
 const INPUT_STYLES =
-  'p-1 rounded-md border border-gray-400 text-lg outline-purple';
+  'p-1 rounded-md border border-gray-400 text-lg outline-purple w-full';
 const LABEL_STYLES = 'text-lg font-semibold text-gray-200 py-0 mt-1';
 const ERROR_STYLES = 'text-red-500';
 
