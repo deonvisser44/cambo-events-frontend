@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { DateTime } from 'ts-luxon';
 import Head from 'next/head';
 import { categoryColors } from '@/utils/constants';
+import LoadingSpinner from '@/components/layout/loading-spinner';
 
 const EventMap = dynamic(() => import('@/components/events/event-map'), {
   ssr: false,
@@ -15,15 +16,27 @@ export default function SharedEvent() {
   const router = useRouter();
   const { id } = router.query;
   const [event, setEvent] = useState<EventType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     const getEvent = async () => {
       const res = await camboEventsApi.get(`/event/${id}/shared`);
       setEvent(res.data);
+      setIsLoading(false);
     };
     if (id) {
       getEvent();
     }
   }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className='min-h-screen flex justify-center items-center'>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   if (!event) {
     return (
       <div className='min-h-screen flex justify-center items-center'>
