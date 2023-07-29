@@ -1,5 +1,5 @@
 import { addAccessTokenToInterceptor } from '@/services/axios-config';
-import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import { setAuthToken, setHasAccessTokenBeenAddedToInterceptor, setIsAuthenticated, setUserId } from '@/store/user';
 import { UserAuthResponseUserDataType } from '@/utils/types';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -53,6 +53,3 @@ const useFetch = (url: string) => {
 };
 
 export default useFetch;
-function setHasAccessTokenBeenAddedToInterceptor(arg0: boolean): any {
-  throw new Error('Function not implemented.');
-}

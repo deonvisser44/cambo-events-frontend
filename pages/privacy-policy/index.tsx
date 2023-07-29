@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
           <br /> By posting an event on our website, you agree to allow us to
           display your event information publicly on our website. If you have
           any questions or concerns about our privacy policy, please contact us
-          at deonvisser@protonmail.com.
+          at cambo-events@proton.me
         </p>
       </div>
     </>
