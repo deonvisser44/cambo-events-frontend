@@ -22,9 +22,11 @@ export default function DeleteModal({
   };
 
   const handleDelete = async () => {
-    await camboEventsApi.delete('/event', {
-      params: { event_id: currentEvent.id },
+    console.log('handleDelete CALLED')
+    const res = await camboEventsApi.delete('/event', {
+      params: { id: currentEvent.id },
     });
+    console.log({ res });
     setIsDeleteModalOpen(false);
     handleUpdateListAfterDelete();
     setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE);

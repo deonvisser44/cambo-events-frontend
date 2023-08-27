@@ -20,7 +20,7 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
   const markEventAsSaved = async (eventId: string) => {
     if (isUserAuthenticated) {
       await camboEventsApi.post('/event/saved', {
-        event_id: eventId,
+        id: eventId,
       });
       setIsSaved(true);
     } else {
@@ -30,7 +30,7 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
 
   const removeAsSaved = async (eventId: string) => {
     await camboEventsApi.delete('/event/saved', {
-      params: { event_id: eventId },
+      params: { id: eventId },
     });
     setIsSaved(false);
     const remainingSavedEvents = savedEvents.filter(
