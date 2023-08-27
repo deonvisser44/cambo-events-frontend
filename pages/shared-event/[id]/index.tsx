@@ -7,6 +7,7 @@ import { DateTime } from 'ts-luxon';
 import Head from 'next/head';
 import { categoryColors } from '@/utils/constants';
 import LoadingSpinner from '@/components/layout/loading-spinner';
+import { replaceUnderscores } from '@/utils/helpers';
 
 const EventMap = dynamic(() => import('@/components/events/event-map'), {
   ssr: false,
@@ -74,17 +75,21 @@ export default function SharedEvent() {
             <h1 className='px-2 text-2xl font-semibold'>{name}</h1>
             <div className='px-2 py-2 gap-1 flex flex-col'>
               <div className='flex gap-2 w-full'>
-                {category.map((item, index) => (
-                  <p
-                    key={index}
-                    style={{
-                      backgroundColor: categoryColors[item.toLocaleLowerCase()],
-                    }}
-                    className='rounded-lg bg-slate-700 px-2 py-1 text-white text-xs'
-                  >
-                    {item.toUpperCase()}
-                  </p>
-                ))}
+                {category.map((item, index) => {
+                  const categoryWithoutUnderscores = replaceUnderscores(item);
+                  return (
+                    <p
+                      key={index}
+                      style={{
+                        backgroundColor:
+                          categoryColors[item.toLocaleLowerCase()],
+                      }}
+                      className='rounded-lg bg-slate-700 px-2 py-1 text-white text-xs'
+                    >
+                      {categoryWithoutUnderscores.toUpperCase()}
+                    </p>
+                  );
+                })}
               </div>
             </div>
 

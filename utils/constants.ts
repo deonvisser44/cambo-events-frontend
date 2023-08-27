@@ -79,6 +79,7 @@ export enum EventCategoryOptions {
 
 export const categoryOptions = [
   { label: 'ART', value: 'ART' },
+  { label: 'BOARD GAME', value: 'BOARD_GAME' },
   { label: 'MUSIC', value: 'MUSIC' },
   { label: 'DANCE', value: 'DANCE' },
   { label: 'QUIZ', value: 'QUIZ' },
@@ -107,6 +108,7 @@ export const categoryColors: { [key: string]: string } = {
   cultural: '#3cdeab',
   workshop: '#92de3c',
   education: '#3c4fde',
+  board_game: '#eb8d1a',
 };
 
 export const cityOptions = [

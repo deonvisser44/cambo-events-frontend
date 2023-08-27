@@ -111,3 +111,9 @@ export const groupSavedEventByDay = (myArray: SavedEventType[]): EventType[][] =
     return groups;
   }
 };
+
+export const replaceUnderscores = (phrase: string) => {
+  const phraseWithoutUnderscores = phrase.split('_');
+  const phraseWithSpaces = phraseWithoutUnderscores.join(' ');
+  return phraseWithSpaces;
+}

@@ -14,6 +14,7 @@ import DeleteModal from './delete-modal';
 import { isBrowser, isMobile } from 'react-device-detect';
 import ShareButton from './share-button';
 import { categoryColors } from '@/utils/constants';
+import { replaceUnderscores } from '@/utils/helpers';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -97,17 +98,20 @@ export default function EventCard({
 
         <p className='text-xs'>{startDateToUSe}</p>
         <div className='flex gap-2 w-full'>
-          {category.map((item, index) => (
-            <p
-              key={index}
-              style={{
-                backgroundColor: categoryColors[item.toLocaleLowerCase()],
-              }}
-              className='rounded-lg px-2 py-1 text-white text-xs'
-            >
-              {item.toUpperCase()}
-            </p>
-          ))}
+          {category.map((item, index) => {
+            const categoryWithoutUnderscores = replaceUnderscores(item);
+            return (
+              <p
+                key={index}
+                style={{
+                  backgroundColor: categoryColors[item.toLocaleLowerCase()],
+                }}
+                className='rounded-lg px-2 py-1 text-white text-xs'
+              >
+                {categoryWithoutUnderscores.toUpperCase()}
+              </p>
+            );
+          })}
         </div>
       </div>
       {shouldShowOpenButton && (
