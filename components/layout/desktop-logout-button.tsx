@@ -1,13 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
-import {
-  setAuthToken,
-  setIsAuthenticated,
-  setSavedEventIds,
-  setSavedEvents,
-  setUserId,
-} from '@/store/user';
+import { setAuthToken, setIsAuthenticated, setUserId } from '@/store/user';
+import { setSavedEventIds, setSavedEvents } from '@/store/events';
 
 export default function DesktopLogoutButton() {
   const dispatch = useDispatch();

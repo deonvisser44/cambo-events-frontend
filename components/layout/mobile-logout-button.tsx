@@ -4,10 +4,9 @@ import { useDispatch } from 'react-redux';
 import {
   setAuthToken,
   setIsAuthenticated,
-  setSavedEventIds,
-  setSavedEvents,
   setUserId,
 } from '@/store/user';
+import { setSavedEventIds, setSavedEvents } from '@/store/events';
 
 interface Props {
   setIsOpen: (value: boolean) => void;
