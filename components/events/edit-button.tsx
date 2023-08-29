@@ -1,9 +1,9 @@
-import { setCurrentEvent } from '@/store/user';
 import { EventType } from '@/utils/types';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import EditIcon from '../icons/edit';
 import { useRouter } from 'next/router';
+import { setCurrentEvent } from '@/store/events';
 
 interface Props {
   event: EventType;

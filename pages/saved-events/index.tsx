@@ -3,12 +3,13 @@ import LoginPrompt from '@/components/events/login-prompt';
 import LoadingSpinner from '@/components/layout/loading-spinner';
 import camboEventsApi from '@/services/axios-config';
 import {
-  selectUserState,
+  selectEventsState,
   setSavedEventIds,
   setSavedEvents,
-} from '@/store/user';
+} from '@/store/events';
+import { selectUserState } from '@/store/user';
 import { groupSavedEventByDay } from '@/utils/helpers';
-import { SavedEventType, UserStateType } from '@/utils/types';
+import { EventsStateType, SavedEventType, UserStateType } from '@/utils/types';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -18,7 +19,9 @@ import { DateTime } from 'ts-luxon';
 export default function SavedEvents() {
   const dispatch = useDispatch();
   const userState: UserStateType = useSelector(selectUserState);
-  const { isUserAuthenticated, savedEvents } = userState;
+  const eventsState: EventsStateType = useSelector(selectEventsState);
+  const { isUserAuthenticated } = userState;
+  const { savedEvents } = eventsState;
   const [isLoading, setIsLoading] = useState(false);
   const savedEventsGroupedByDate = groupSavedEventByDay(savedEvents);
 

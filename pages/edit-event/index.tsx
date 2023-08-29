@@ -3,14 +3,13 @@ import { Formik, Field, ErrorMessage } from 'formik';
 import { DateTime } from 'ts-luxon';
 import CategorySelect from '@/components/events/category-select';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserState, setCurrentEvent } from '@/store/user';
 import {
   categoryOptions,
   cityOptions,
   DEFAULT_CURRENT_EVENT_STATE,
 } from '@/utils/constants';
 import { calculateStartAndEndTimes } from '@/utils/helpers';
-import { submitEventType, UserStateType } from '@/utils/types';
+import { EventsStateType, submitEventType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
 import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
@@ -18,6 +17,7 @@ import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import CitySelect from '@/components/events/city-select';
+import { selectEventsState, setCurrentEvent } from '@/store/events';
 
 const PostEventMap = dynamic(
   () => import('../../components/events/post-event-map'),
@@ -34,8 +34,9 @@ const ERROR_STYLES = 'text-red-500';
 export default function EditEventPage() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const userState: UserStateType = useSelector(selectUserState);
-  const { currentEvent } = userState;
+  const eventsState: EventsStateType = useSelector(selectEventsState);
+  const { currentEvent } = eventsState;
+  const eventCopy = { ...currentEvent };
   const start = DateTime.fromJSDate(
     new Date(currentEvent.start_date)
   ).toISODate();
@@ -50,12 +51,6 @@ export default function EditEventPage() {
   //   new Date(currentEvent.end_date)
   // ).toFormat('hh:mm');
 
-  useEffect(() => {
-    return () => {
-      setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE);
-    };
-  }, []);
-
   const initialFormValues = {
     name: currentEvent?.name,
     description: currentEvent?.description,
@@ -64,7 +59,10 @@ export default function EditEventPage() {
     // endDate: end,
     // endTime: endMilitaryTime,
     categories: selectedCategories,
-    area: { label: currentEvent?.area?.toUpperCase(), value: currentEvent?.area?.toUpperCase() },
+    area: {
+      label: currentEvent?.area?.toUpperCase(),
+      value: currentEvent?.area?.toUpperCase(),
+    },
     coords: currentEvent?.location,
   };
 
@@ -88,7 +86,7 @@ export default function EditEventPage() {
       // endTime: endTime,
     });
     const postEventBody = {
-      id: currentEvent.id,
+      id: eventCopy.id,
       name,
       description,
       category: categoriesToUse,
@@ -100,10 +98,10 @@ export default function EditEventPage() {
     const { status } = await camboEventsApi.put('/event', postEventBody);
     if (status === 200) {
       toast.success('Event updated');
+      dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
     } else {
       toast.warn('Failed to update event');
     }
-    dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
     router.replace('/my-events');
   };
 
@@ -130,9 +128,7 @@ export default function EditEventPage() {
           <meta property='og:image' content='/favicon.ico' />
         </Head>
         <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
-          <h3 className='text-3xl text-center text-purple'>
-            Edit Event
-          </h3>
+          <h3 className='text-3xl text-center text-purple'>Edit Event</h3>
           <div>
             <Formik
               initialValues={initialFormValues}

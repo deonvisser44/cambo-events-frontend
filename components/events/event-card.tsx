@@ -1,11 +1,10 @@
-import { EventType, UserStateType } from '@/utils/types';
+import { EventType, EventsStateType } from '@/utils/types';
 import React, { useEffect, useState } from 'react';
 import { DateTime } from 'ts-luxon';
 import Close from '../icons/close';
 import Expand from '../icons/expand';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserState, setCurrentEvent } from '@/store/user';
 import Bookmark from './event-bookmark';
 import { useRouter } from 'next/router';
 import EditButton from './edit-button';
@@ -15,6 +14,7 @@ import { isBrowser, isMobile } from 'react-device-detect';
 import ShareButton from './share-button';
 import { categoryColors } from '@/utils/constants';
 import { replaceUnderscores } from '@/utils/helpers';
+import { selectEventsState, setCurrentEvent } from '@/store/events';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -26,19 +26,15 @@ const EventModal = dynamic(() => import('./event-modal'), {
 
 interface Props {
   event: EventType;
-  handleUpdateListAfterDelete?: () => void;
 }
 
-export default function EventCard({
-  event,
-  handleUpdateListAfterDelete,
-}: Props) {
+export default function EventCard({ event }: Props) {
   const router = useRouter();
-  const userState: UserStateType = useSelector(selectUserState);
+  const eventsState: EventsStateType = useSelector(selectEventsState);
   const dispatch = useDispatch();
   const { id, name, description, location, start_date, end_date, category } =
     event;
-  const { savedEventIds } = userState;
+  const { savedEventIds } = eventsState;
   const [isShowMoreOpen, setIsShowMoreOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
@@ -47,7 +43,7 @@ export default function EventCard({
   const luxonStartDate = DateTime.fromISO(new Date(start_date).toISOString());
   const startDateToUSe = luxonStartDate.toLocaleString(DateTime.DATETIME_MED);
   const luxonEndDate = DateTime.fromISO(new Date(end_date).toISOString());
-  const EndDateToUSe = luxonEndDate.toLocaleString(DateTime.DATETIME_MED);
+  const EndDateToUse = luxonEndDate.toLocaleString(DateTime.DATETIME_MED);
   const isOnMyEventsPage = router.pathname.includes('my-events');
 
   useEffect(() => {
@@ -133,10 +129,7 @@ export default function EventCard({
         </div>
       )}
       {isDeleteModalOpen && (
-        <DeleteModal
-          setIsDeleteModalOpen={setIsDeleteModalOpen}
-          handleUpdateListAfterDelete={handleUpdateListAfterDelete!}
-        />
+        <DeleteModal setIsDeleteModalOpen={setIsDeleteModalOpen} />
       )}
       {isEventModalOpen && (
         <EventModal event={event} setIsEventModalOpen={setIsEventModalOpen} />

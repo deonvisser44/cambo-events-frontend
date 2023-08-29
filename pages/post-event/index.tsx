@@ -2,11 +2,15 @@ import React, { useEffect } from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { DateTime } from 'ts-luxon';
 import CategorySelect from '@/components/events/category-select';
-import { useSelector } from 'react-redux';
-import { selectUserState, setCurrentEvent } from '@/store/user';
-import { DEFAULT_CURRENT_EVENT_STATE, categoryOptions, cityOptions } from '@/utils/constants';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUserState } from '@/store/user';
+import {
+  DEFAULT_CURRENT_EVENT_STATE,
+  categoryOptions,
+  cityOptions,
+} from '@/utils/constants';
 import { calculateStartAndEndTimes } from '@/utils/helpers';
-import { submitEventType, UserStateType } from '@/utils/types';
+import { EventsStateType, submitEventType, UserStateType } from '@/utils/types';
 import camboEventsApi from '@/services/axios-config';
 import { EVENT_VALIDATION_SCHEMA } from '@/utils/yup';
 import { useRouter } from 'next/router';
@@ -15,6 +19,7 @@ import { toast } from 'react-toastify';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import CitySelect from '@/components/events/city-select';
+import { selectEventsState, setCurrentEvent } from '@/store/events';
 
 const PostEventMap = dynamic(
   () => import('../../components/events/post-event-map'),
@@ -30,8 +35,11 @@ const ERROR_STYLES = 'text-red-500';
 
 export default function PostEvent() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const userState: UserStateType = useSelector(selectUserState);
-  const { currentEvent, isUserAuthenticated } = userState;
+  const eventsState: EventsStateType = useSelector(selectEventsState);
+  const { isUserAuthenticated } = userState;
+  const { currentEvent } = eventsState;
   const start = DateTime.fromJSDate(
     new Date(currentEvent.start_date)
   ).toISODate();
@@ -54,7 +62,10 @@ export default function PostEvent() {
     // endDate: end,
     // endTime: endMilitaryTime,
     categories: selectedCategories,
-    area: { label: currentEvent?.area?.toUpperCase(), value: currentEvent?.area?.toUpperCase() },
+    area: {
+      label: currentEvent?.area?.toUpperCase(),
+      value: currentEvent?.area?.toUpperCase(),
+    },
     coords: currentEvent?.location,
   };
 
@@ -97,7 +108,7 @@ export default function PostEvent() {
 
   useEffect(() => {
     return () => {
-      setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE);
+      dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
     };
   }, []);
 
@@ -120,9 +131,7 @@ export default function PostEvent() {
         <meta property='og:image' content='/favicon.ico' />
       </Head>
       <div className='min-h-screen py-3 md:w-2/5 mx-auto my-auto'>
-        <h3 className='text-3xl text-center text-purple'>
-          Post Event
-        </h3>
+        <h3 className='text-3xl text-center text-purple'>Post Event</h3>
         <div>
           <Formik
             initialValues={initialFormValues}

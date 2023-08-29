@@ -1,28 +1,13 @@
-import { EventType, SavedEventType, UserStateType } from '@/utils/types';
+import { UserStateType } from '@/utils/types';
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
-import { DateTime } from 'ts-luxon';
 
 const initialState: UserStateType = {
   user_id: '',
   isUserAuthenticated: false,
   authToken: '',
-  savedEvents: [],
-  savedEventIds: [],
   hasAccessTokenBeenAddedToInterceptor: false,
   isAuthModalOpen: false,
-  currentEvent: {
-    id: '',
-    host_id: '',
-    name: '',
-    description: '',
-    start_date: DateTime.local().toISODate()!,
-    end_date: DateTime.local().toISODate()!,
-    location: { lat: 11.554032, lng: 104.924882 },
-    image: { url: '', path: '' },
-    category: [],
-    area: 'PHNOM PENH',
-  },
 };
 
 export const userSlice = createSlice({
@@ -38,20 +23,11 @@ export const userSlice = createSlice({
     setAuthToken: (state, action: PayloadAction<string>) => {
       state.authToken = action.payload;
     },
-    setSavedEvents: (state, action: PayloadAction<SavedEventType[]>) => {
-      state.savedEvents = action.payload;
-    },
-    setSavedEventIds: (state, action: PayloadAction<string[]>) => {
-      state.savedEventIds = action.payload;
-    },
     setHasAccessTokenBeenAddedToInterceptor: (
       state,
       action: PayloadAction<boolean>
     ) => {
       state.hasAccessTokenBeenAddedToInterceptor = action.payload;
-    },
-    setCurrentEvent: (state, action: PayloadAction<EventType>) => {
-      state.currentEvent = action.payload;
     },
     setIsAuthModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isAuthModalOpen = action.payload;
@@ -63,10 +39,7 @@ export const {
   setUserId,
   setIsAuthenticated,
   setAuthToken,
-  setSavedEvents,
-  setSavedEventIds,
   setHasAccessTokenBeenAddedToInterceptor,
-  setCurrentEvent,
   setIsAuthModalOpen,
 } = userSlice.actions;
 export const selectUserState = (state: any) => state.user;

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Icon, LatLngExpression } from 'leaflet';
 import { FieldMetaProps, useField } from 'formik';
-import { MapClickEvent, UserStateType } from '@/utils/types';
+import { EventsStateType, MapClickEvent } from '@/utils/types';
 import { useSelector } from 'react-redux';
-import { selectUserState } from '@/store/user';
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
+import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import { selectEventsState } from '@/store/events';
 
 interface LocationMarkerProps {
   setValue: (value: any, shouldValidate?: boolean | undefined) => void;
@@ -41,12 +41,12 @@ interface PostEventProps {
 }
 
 export default function PostEventMap({ field: { name } }: PostEventProps) {
-  const userState: UserStateType = useSelector(selectUserState);
+  const eventsState: EventsStateType = useSelector(selectEventsState);
   const {
     currentEvent: {
       location: { lat, lng },
     },
-  } = userState;
+  } = eventsState;
   const [_, state, { setValue }] = useField(name);
   const [isMounted, setIsMounted] = React.useState(false);
 

@@ -1,4 +1,4 @@
-export {}
+export {};
 
 export interface ImageDataType {
   url: string;
@@ -19,7 +19,7 @@ export interface EventType {
   host_id: string;
   name: string;
   description: string;
-  start_date: Date | string ;
+  start_date: Date | string;
   end_date: Date | string;
   location: LocationType;
   image: ImageDataType;
@@ -55,25 +55,29 @@ export interface submitEventType {
   startTime: string;
   endDate?: Date | null | string;
   endTime?: string | null;
-  categories?: { label:string, value: string }[];
+  categories?: { label: string; value: string }[];
   coords: LocationType;
-  area: { label:string, value: string };
+  area: { label: string; value: string };
 }
 
 export interface UserAuthResponseUserDataType {
-    id: string;
-    token: string;
+  id: string;
+  token: string;
 }
 
 export interface UserStateType {
   user_id: string;
   isUserAuthenticated: boolean;
   authToken: string;
+  hasAccessTokenBeenAddedToInterceptor: boolean;
+  isAuthModalOpen: boolean;
+}
+
+export interface EventsStateType {
   savedEvents: SavedEventType[];
   savedEventIds: string[];
-  hasAccessTokenBeenAddedToInterceptor: boolean;
+  userCreatedEvents: EventType[];
   currentEvent: EventType;
-  isAuthModalOpen: boolean;
 }
 
 export interface EventsByDate {

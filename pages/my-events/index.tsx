@@ -4,47 +4,43 @@ import LoadingSpinner from '@/components/layout/loading-spinner';
 import camboEventsApi from '@/services/axios-config';
 import { selectUserState } from '@/store/user';
 import { groupByDay } from '@/utils/helpers';
-import { EventType, UserStateType } from '@/utils/types';
+import { EventsStateType, UserStateType } from '@/utils/types';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { DateTime } from 'ts-luxon';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectEventsState, setUserCreatedEvents } from '@/store/events';
 
 export default function MyEvents() {
   const userState: UserStateType = useSelector(selectUserState);
-  const { isUserAuthenticated, user_id, currentEvent } = userState;
-  const [userEvents, setUserEvents] = useState<EventType[]>([]);
+  const eventsState: EventsStateType = useSelector(selectEventsState);
+  const { isUserAuthenticated, user_id } = userState;
+  const { userCreatedEvents } = eventsState;
   const [isLoading, setIsLoading] = useState(false);
-  const eventsGroupedByDate = groupByDay(userEvents);
+  const eventsGroupedByDate = groupByDay(userCreatedEvents);
+  const dispatch = useDispatch();
 
   const fetchUserCreatedEvents = async () => {
     setIsLoading(true);
     const response = await camboEventsApi.get('/event', {
       params: { host_id: user_id },
     });
-    setUserEvents(response.data);
+    dispatch(setUserCreatedEvents(response.data));
     setIsLoading(false);
-  };
-
-  const handleUpdateListAfterDelete = () => {
-    const remainingEvents = userEvents.filter(
-      (event) => event.id !== currentEvent.id
-    );
-    setUserEvents(remainingEvents);
   };
 
   useEffect(() => {
     if (isUserAuthenticated) {
       fetchUserCreatedEvents();
     } else {
-      setUserEvents([]);
+      dispatch(setUserCreatedEvents([]));
     }
   }, [isUserAuthenticated]);
 
   if (!isUserAuthenticated) {
     return <LoginPrompt text='Please login to see your events.' />;
-  } else if (userEvents.length < 1) {
+  } else if (userCreatedEvents.length < 1) {
     return (
       <div className='flex flex-col justify-around items-center min-h-screen px-4'>
         <p className='text-white text-2xl text-center'>
@@ -97,13 +93,7 @@ export default function MyEvents() {
                   <hr className='w-1/5 md:w-3/5 my-2 h-[4px] rounded-lg border-none bg-gradient-to-r from-indigo-500 via-violet-500 to-orange-500' />
                   <div className='md:min-h-fit flex flex-col md:grid md:grid-cols-3 items-center md:items-start w-full md:w-full mt-1 md:mt-2 pb-10 gap-3 md:gap-6 md:mx-auto md:my-auto'>
                     {eventsArray.map((event, index) => (
-                      <EventCard
-                        key={index}
-                        event={event}
-                        handleUpdateListAfterDelete={
-                          handleUpdateListAfterDelete
-                        }
-                      />
+                      <EventCard key={index} event={event} />
                     ))}
                   </div>
                 </div>

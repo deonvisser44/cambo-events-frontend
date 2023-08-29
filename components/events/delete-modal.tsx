@@ -1,35 +1,35 @@
 import camboEventsApi from '@/services/axios-config';
-import { selectUserState, setCurrentEvent } from '@/store/user';
+import {
+  selectEventsState,
+  setCurrentEvent,
+  setRemainingEventAfterDelete,
+} from '@/store/events';
 import { DEFAULT_CURRENT_EVENT_STATE } from '@/utils/constants';
-import { UserStateType } from '@/utils/types';
+import { EventsStateType } from '@/utils/types';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   setIsDeleteModalOpen: (value: boolean) => void;
-  handleUpdateListAfterDelete: () => void;
 }
 
-export default function DeleteModal({
-  setIsDeleteModalOpen,
-  handleUpdateListAfterDelete,
-}: Props) {
-  const userState: UserStateType = useSelector(selectUserState);
-  const { currentEvent } = userState;
+export default function DeleteModal({ setIsDeleteModalOpen }: Props) {
+  const dispatch = useDispatch();
+  const eventsState: EventsStateType = useSelector(selectEventsState);
+  const { currentEvent } = eventsState;
 
   const handleModalDivClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
 
   const handleDelete = async () => {
-    console.log('handleDelete CALLED')
-    const res = await camboEventsApi.delete('/event', {
+    await camboEventsApi.delete('/event', {
       params: { id: currentEvent.id },
     });
-    console.log({ res });
+    dispatch(setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE));
     setIsDeleteModalOpen(false);
-    handleUpdateListAfterDelete();
-    setCurrentEvent(DEFAULT_CURRENT_EVENT_STATE);
+    dispatch(setRemainingEventAfterDelete());
   };
 
   return (

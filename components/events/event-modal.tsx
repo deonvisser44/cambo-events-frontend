@@ -1,9 +1,8 @@
-import { EventType, UserStateType } from '@/utils/types';
+import { EventType, EventsStateType, UserStateType } from '@/utils/types';
 import React, { useState } from 'react';
 import { DateTime } from 'ts-luxon';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserState, setCurrentEvent } from '@/store/user';
 import Bookmark from './event-bookmark';
 import { useRouter } from 'next/router';
 import EditButton from './edit-button';
@@ -11,6 +10,7 @@ import DeleteIcon from '../icons/delete';
 import DeleteModal from './delete-modal';
 import { categoryColors } from '@/utils/constants';
 import { replaceUnderscores } from '@/utils/helpers';
+import { selectEventsState, setCurrentEvent } from '@/store/events';
 
 const EventMap = dynamic(() => import('./event-map'), {
   ssr: false,
@@ -18,19 +18,14 @@ const EventMap = dynamic(() => import('./event-map'), {
 
 interface Props {
   event: EventType;
-  handleUpdateListAfterDelete?: () => void;
   setIsEventModalOpen: (value: boolean) => void;
 }
 
-export default function EventModal({
-  event,
-  handleUpdateListAfterDelete,
-  setIsEventModalOpen,
-}: Props) {
+export default function EventModal({ event, setIsEventModalOpen }: Props) {
   const router = useRouter();
-  const userState: UserStateType = useSelector(selectUserState);
+  const eventsState: EventsStateType = useSelector(selectEventsState);
   const dispatch = useDispatch();
-  const { savedEventIds } = userState;
+  const { savedEventIds } = eventsState;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { id, name, description, location, start_date, end_date, category } =
     event;
@@ -111,10 +106,7 @@ export default function EventModal({
             <EventMap lat={Number(location.lat)} lng={Number(location.lng)} />
           </div>
           {isDeleteModalOpen && (
-            <DeleteModal
-              setIsDeleteModalOpen={setIsDeleteModalOpen}
-              handleUpdateListAfterDelete={handleUpdateListAfterDelete!}
-            />
+            <DeleteModal setIsDeleteModalOpen={setIsDeleteModalOpen} />
           )}
         </div>
       </div>

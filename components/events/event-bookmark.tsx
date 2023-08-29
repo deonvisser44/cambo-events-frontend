@@ -1,10 +1,11 @@
 import camboEventsApi from '@/services/axios-config';
-import { selectUserState, setIsAuthModalOpen, setSavedEvents } from '@/store/user';
-import { UserStateType } from '@/utils/types';
+import { selectUserState, setIsAuthModalOpen } from '@/store/user';
+import { EventsStateType, UserStateType } from '@/utils/types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BookMarkFilled from '../icons/bookmark-filled';
 import BookmarkUnfilled from '../icons/bookmark-unfilled';
+import { selectEventsState, setSavedEvents } from '@/store/events';
 
 interface Props {
   isSavedForUser: boolean;
@@ -15,7 +16,9 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
   const dispatch = useDispatch();
   const [isSaved, setIsSaved] = useState(isSavedForUser);
   const userState: UserStateType = useSelector(selectUserState);
-  const { savedEvents, isUserAuthenticated } = userState;
+  const eventsState: EventsStateType = useSelector(selectEventsState);
+  const { isUserAuthenticated } = userState;
+  const { savedEvents } = eventsState;
 
   const markEventAsSaved = async (eventId: string) => {
     if (isUserAuthenticated) {
@@ -24,7 +27,7 @@ export default function Bookmark({ isSavedForUser, eventId }: Props) {
       });
       setIsSaved(true);
     } else {
-      dispatch(setIsAuthModalOpen(true))
+      dispatch(setIsAuthModalOpen(true));
     }
   };
 
